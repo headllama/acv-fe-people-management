@@ -1,0 +1,48 @@
+trigger:
+- main
+variables:
+  uiSource: '.'
+  uiBuild: '$(uiSource)/build'
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: NodeTool@0
+    displayName: Installing node 14+
+    inputs:
+      versionSpec: 14.x
+
+  - task: YarnInstaller@3
+    displayName: Configuring yarn in its recent version
+
+  - task: Cache@2
+    inputs:
+      key: yarn | $(Agent.OS) | yarn.lock | node_modules
+      path: $(YARN_CACHE_FOLDER)
+      restoreKeys: |
+        yarn | $(Agent.OS)
+        yarn
+    displayName: Cache Yarn packages
+
+  - script: yarn --frozen-lockfile
+    displayName: Installing project dependencies
+
+  - task: Yarn@3
+    displayName: Build the project
+    inputs:
+      arguments: build
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(System.DefaultWorkingDirectory)/build'
+      contents: '**'
+      targetFolder: $(Build.ArtifactStagingDirectory)/dist
+    displayName: 'Copy dist'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+      artifactName: dist
+    displayName: 'Publish dist artifact'
