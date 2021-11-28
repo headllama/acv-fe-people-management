@@ -35,12 +35,16 @@ export function Header() {
         </HStack>
 
         <Flex align="center">
-          <Avatar size="md" name={user.userName} src={user.profileUri} />
-          <Box ml="4" textAlign="left">
-            <Text color="gray.800" fontSize="lg">
-              {user.userName}
-            </Text>
-          </Box>
+          {!!user && (
+            <>
+              <Avatar size="md" name={user.userName} src={user.profileUri} />
+              <Box ml="4" textAlign="left">
+                <Text color="gray.800" fontSize="lg">
+                  {user.userName}
+                </Text>
+              </Box>
+            </>
+          )}
         </Flex>
       </Flex>
     </Flex>

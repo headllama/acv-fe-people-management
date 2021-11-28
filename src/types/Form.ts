@@ -13,6 +13,7 @@ export interface FormInputProps {
   label: string
   setValue?: any
   required?: boolean
+  validations?: any
 }
 
 export interface FormInputMaskProps extends FormInputProps {

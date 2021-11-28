@@ -1,11 +1,9 @@
-import { useState, useCallback, ChangeEvent } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useState, useCallback, useEffect } from 'react'
 import { Input } from './Input'
 import { IoLogInOutline } from 'react-icons/io5'
 import { Stack, Image, Text, Button, Icon } from '@chakra-ui/react'
 import logoImg from '../../assets/logo.png'
 import { useAuth } from '../../hooks/useAuth'
-import { AuthenticateInput } from '../../types'
 
 type StepEmailProps = {
   _changeCurrentStep: (step: 'next' | 'previous') => void
@@ -21,8 +19,14 @@ export function StepEmail({ _changeCurrentStep }: StepEmailProps) {
 
   const handleSignIn = useCallback(async () => {
     await searchUser(email)
-    _changeCurrentStep('next')
-  }, [email, searchUser, _changeCurrentStep])
+  }, [email, searchUser])
+
+  useEffect(() => {
+    const user = localStorage.getItem('@Aceville:user')
+    if (user) {
+      _changeCurrentStep('next')
+    }
+  }, [_changeCurrentStep])
 
   return (
     <>

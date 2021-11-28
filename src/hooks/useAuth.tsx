@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, {
-  useCallback,
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-} from 'react'
+import { useCallback, createContext, useState, useContext } from 'react'
 
 import { api } from '../services/api'
+import { useToast } from '@chakra-ui/react'
 
 import { AuthenticateInput, children } from '../types'
 
@@ -32,6 +27,7 @@ type AuthProviderProps = children
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 function AuthProvider({ children }: AuthProviderProps) {
+  const toast = useToast()
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@Aceville:token')
     const user = localStorage.getItem('@Aceville:user')
@@ -40,33 +36,72 @@ function AuthProvider({ children }: AuthProviderProps) {
       return { token, user: JSON.parse(user) }
     }
 
+    if (user) {
+      return { token: '', user: JSON.parse(user) }
+    }
+
     return {} as AuthState
   })
 
   const searchUser = useCallback(async (email) => {
-    const response = await api.get(`Authentication/SearchUser/${email}`)
-    const userData = {
-      userName: response.data.userName,
-      email,
-      profileUri: response.data.profileUri,
-    }
-
-    localStorage.setItem('@Aceville:user', JSON.stringify(userData))
-    setData({
-      ...data,
-      user: userData,
-    })
+    //const response = await api.get(`Authentication/SearchUser/${email}`)
+    api
+      .get(`Authentication/SearchUser/${email}`)
+      .then((response) => {
+        const userData = {
+          userName: response.data.userName,
+          email,
+          profileUri: response.data.profileUri,
+        }
+        localStorage.setItem('@Aceville:user', JSON.stringify(userData))
+        setData({
+          ...data,
+          user: userData,
+        })
+      })
+      .catch((error) => {
+        toast({
+          title: `${
+            error.response.data.errors[0].message
+              ? error.response.data.errors[0].message
+              : error.response.data.message
+          }`,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        })
+      })
   }, [])
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('Authentication/Authenticate/', {
-      email,
-      password,
-    })
+    api
+      .post('Authentication/Authenticate/', {
+        email,
+        password,
+      })
+      .then((response) => {
+        const { token } = response.data
+        const userStore = localStorage.getItem('@Aceville:user')
+        localStorage.setItem('@Aceville:token', token)
 
-    const { token } = response.data
-    localStorage.setItem('@Aceville:token', token)
-    setData({ ...data, token })
+        if (token && userStore) {
+          setData({ token, user: JSON.parse(userStore) })
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: `${
+            error.response.data.errors[0].message
+              ? error.response.data.errors[0].message
+              : error.response.data.message
+          }`,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        })
+      })
   }, [])
 
   const signOut = useCallback(() => {

@@ -35,10 +35,10 @@ export const FormInputDropdown: React.FC<FormInputDropdownProps> = ({
   return (
     <FormControl
       size={'small'}
-      mt={4}
+      mt={2}
       pr={2}
       isInvalid={errors[name] ? true : false}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel style={{ fontSize: '14px' }}>{label}</FormLabel>
       <Controller
         render={({ field: { value } }) => (
           <Select

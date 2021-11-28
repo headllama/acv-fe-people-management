@@ -24,7 +24,7 @@ export function FormLogin() {
       case LoginSteps.email:
         return <StepEmail _changeCurrentStep={_changeCurrentStep} />
       case LoginSteps.password:
-        return <StepPassword />
+        return <StepPassword _changeCurrentStep={_changeCurrentStep} />
       default:
         return <></>
     }

@@ -8,7 +8,6 @@ import {
   ModalCloseButton,
   Button,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 
 type CustomModalProps = {
   title?: string
@@ -25,21 +24,14 @@ export function CustomModal({
   handleOpenModal,
   closeModal,
 }: CustomModalProps) {
-  const [isOpen, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (handleOpenModal) setOpen(handleOpenModal)
-  }, [handleOpenModal])
-
   function handleCloseModal() {
-    setOpen(false)
     closeModal()
   }
 
   return (
     <>
       <Modal
-        isOpen={isOpen}
+        isOpen={handleOpenModal}
         onClose={() => {
           handleCloseModal()
         }}>

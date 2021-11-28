@@ -8,7 +8,7 @@ import { CollaboratorDetail } from '../pages/Collaborator/detail'
 import { Dashboard } from '../pages/Dashboard'
 import { SignIn } from '../pages/SignIn'
 import { Training } from '../pages/Training'
-import { UploadBox } from '../components/UploadBox'
+// import { UploadBox } from '../components/UploadBox'
 import { CollaboratorCreate } from '../pages/Collaborator/create'
 
 export function Routes() {
@@ -30,7 +30,7 @@ export function Routes() {
       />
       <Route path="/collaborator" component={Collaborator} isPrivate exact />
       <Route path="/training" component={Training} isPrivate exact />
-      <Route path="/upload" component={UploadBox} isPrivate exact />
+      {/* <Route path="/upload" component={UploadBox} isPrivate exact /> */}
     </Switch>
   )
 }

@@ -38,7 +38,8 @@ export const Circle = styled.div<CircleProps>`
     margin-right: 16px;
     position: relative;
     z-index: 2;
-
+    min-width: 16px;
+    min-height: 16px;
     &::after {
       content: '';
       width: 2px;

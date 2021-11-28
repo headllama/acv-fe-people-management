@@ -15,21 +15,27 @@ export const FormInputText = ({
   label,
   register,
   errors,
+  required = false,
+  validations,
 }: FormInputProps) => {
+  const inputValidation = required
+    ? { required: 'Campo é obrigatório' }
+    : { ...validations }
+
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { value } }) => (
-        <FormControl mt={4} pr={2} isInvalid={errors[name] ? true : false}>
-          <FormLabel htmlFor={name}>{label}</FormLabel>
+        <FormControl mt={2} pr={2} isInvalid={errors[name] ? true : false}>
+          <FormLabel style={{ fontSize: '14px' }} htmlFor={name}>
+            {label}
+          </FormLabel>
           <Input
             id={name}
             value={value}
             placeholder={label}
-            {...register(name, {
-              required: 'Campo é obrigatório',
-            })}
+            {...register(name, inputValidation)}
           />
           <FormErrorMessage>
             {errors[name] && errors[name].message}

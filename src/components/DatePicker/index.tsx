@@ -5,7 +5,7 @@ import './date-picker.css'
 
 interface Props {
   isClearable?: boolean
-  onChange: (date: Date) => any
+  onChange: (date: Date, e: any) => void
   selectedDate: Date | undefined
   showPopperArrow?: boolean
 }
@@ -16,12 +16,13 @@ const CustomDatePicker = ({
   isClearable = false,
   showPopperArrow = false,
   ...props
-}: Props & HTMLAttributes<HTMLElement>) => {
+}: Props) => {
   return (
     <DatePicker
       selected={selectedDate}
       onChange={onChange}
       isClearable={isClearable}
+      dateFormat="dd/MM/yyyy"
       showPopperArrow={showPopperArrow}
       {...props}
     />

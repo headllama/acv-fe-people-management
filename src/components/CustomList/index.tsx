@@ -37,7 +37,9 @@ export function CustomList({
               display="flex"
               alignItems="center"
               justifyContent="center"
-              key={index}>
+              key={index}
+              cursor="pointer"
+              onClick={() => history.push(item.redirectRoute)}>
               <Avatar
                 bg="gray.50"
                 size="md"
@@ -53,7 +55,6 @@ export function CustomList({
                 as={BsChevronRight}
                 color="purple.900"
                 cursor="pointer"
-                onClick={() => history.push(item.redirectRoute)}
               />
             </ListItem>
             {!disableLastDivider && <Divider />}

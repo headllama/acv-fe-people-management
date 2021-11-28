@@ -45,8 +45,8 @@ export type children = { children: ReactNode }
 
 export interface Dependent {
   fullName: string
-  birthdate: Date | string
-  cpf?: string
+  birthdate: string
+  cpf: string
 }
 
 export interface EmployeeAddress {
@@ -62,7 +62,7 @@ export interface EmployeeAddress {
 export interface Collaborators {
   fullName: string
   cpf: string
-  birthdate: Date | string
+  birthdate: string
   education: string
   breed: string
   maritalStatus: string
@@ -71,8 +71,8 @@ export interface Collaborators {
   evaluationPeriod: string
   workPeriod: string
   occupation: string
-  remuneration: number
-  admissionDate: Date | string
+  remuneration: string
+  admissionDate: string
   pis: string
   militaryCertificate: string
   firstPhone: string
@@ -84,18 +84,20 @@ export interface Collaborators {
 export interface CollaboratorsCreate extends Collaborators {
   rgDocument: string
   rgIssuer: string
-  rgRegisterDate: Date | string
+  rgRegisterDate: string
   cnhDocument: string
   cnhCategory: string
-  cnhRegisterDate: Date | string
-  cnhExpiration: Date | string
+  cnhRegisterDate: string
+  cnhExpiration: string
   ctpsDocument: string
   ctpsSeries: string
   ctpsState: string
-  ctpsRegisterDate: Date | string
+  ctpsRegisterDate: string
+  firstCNH: string
   dependent: {
     fullName: string
-    birthdate: Date | string
+    birthdate: string
+    cpf: string
   }
 }
 
