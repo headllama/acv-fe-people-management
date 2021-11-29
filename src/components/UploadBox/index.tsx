@@ -165,7 +165,7 @@ export function UploadBox({ collaboratorId }: UploadBoxProps) {
           </Button>
         }>
         <Dropzone onFileUploaded={setSelectedFile} />
-        {selectedFileType?.isRequired && (
+        {selectedFileType?.isRequired && selectedFileType?.verify && (
           <FormControl mt={4}>
             <FormLabel>Validade</FormLabel>
             <CustomDatePicker

@@ -205,7 +205,6 @@ export function CollaboratorCreate() {
           city: data.employeeAddress.city,
           state: data.employeeAddress.state,
           zipCode: data.employeeAddress.zipCode,
-          nationality: data.employeeAddress.nationality,
         },
       }
       updateCollaborator(collaboratorUpdate, 5)
@@ -867,8 +866,6 @@ export function CollaboratorCreate() {
                   register={register}
                   errors={errors}
                 />
-              </Flex>
-              <Flex direction="row">
                 <FormInputDropdown
                   name="employeeAddress.state"
                   control={control}
@@ -877,13 +874,6 @@ export function CollaboratorCreate() {
                   errors={errors}
                   options={ufs}
                   required
-                />
-                <FormInputText
-                  name="employeeAddress.nationality"
-                  control={control}
-                  label="Nacionalidade"
-                  register={register}
-                  errors={errors}
                 />
               </Flex>
             </div>
@@ -917,7 +907,6 @@ export function CollaboratorCreate() {
             </S.WrapperFooter>
           </S.RightSide>
         )
-
       case 5:
         return (
           <S.RightSide>
