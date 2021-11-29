@@ -14,7 +14,7 @@ export function Sidebar() {
       bg="white"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       flexDir="column"
-      h="100%"
+      h="89vh"
       justifyContent="space-between"
       pl={2}
       left="5"
