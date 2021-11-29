@@ -70,7 +70,7 @@ export function Collaborator() {
         bg="white">
         <Header />
       </Flex>
-      <Flex direction="row" h="100vh" bg="gray.50">
+      <Flex direction="row" bg="gray.50">
         <Flex>
           <Sidebar />
         </Flex>
@@ -117,9 +117,9 @@ export function Collaborator() {
               {hasList ? (
                 <>
                   <CustomList items={collaborators} />
-                  <Flex align="center" justify="center">
+                  {/* <Flex align="center" justify="center">
                     <Pagination />
-                  </Flex>
+                  </Flex> */}
                 </>
               ) : (
                 <Flex align="center" justify="center" p={10}>

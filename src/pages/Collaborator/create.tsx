@@ -100,7 +100,7 @@ export function CollaboratorCreate() {
   const history = useHistory()
   const toast = useToast()
 
-  const [step, setStep] = useState(2)
+  const [step, setStep] = useState(0)
   const [dependents, setDependents] = useState<Dependent[]>([])
   const [ufs, setUfs] = useState<UF[]>([])
   const [collaboradorID, setCollaboradorID] = useState('')
@@ -243,17 +243,22 @@ export function CollaboratorCreate() {
         setStep(stepItem)
       })
       .catch((error) => {
-        toast({
-          title: `${
-            error.response.data.errors[0].message
-              ? error.response.data.errors[0].message
-              : error.response.data.message
-          }`,
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-          position: 'top',
-        })
+        if (
+          error?.response?.data?.errors &&
+          error?.response?.data?.errors.length > 0
+        ) {
+          toast({
+            title: `${
+              error.response.data.errors[0].message
+                ? error.response.data.errors[0].message
+                : error.response.data.message
+            }`,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          })
+        }
       })
   }
 
@@ -276,6 +281,12 @@ export function CollaboratorCreate() {
       }
       setDependents([...dependents, item])
     }
+  }
+
+  function removeDependents(index: number) {
+    const listaNova = [...dependents]
+    listaNova.splice(index, 1)
+    setDependents(listaNova)
   }
 
   function handleGoBack() {
@@ -662,7 +673,6 @@ export function CollaboratorCreate() {
                   register={register}
                   errors={errors}
                   mask="999.999.999-99"
-                  required
                 />
                 <FormInputTextMask
                   name="dependent.birthdate"
@@ -697,7 +707,11 @@ export function CollaboratorCreate() {
                     Adicionar
                   </Button>
                 </S.WrapperDependentsHeader>
-                <CustomListSimple items={dependents} disableLastDivider />
+                <CustomListSimple
+                  items={dependents}
+                  disableLastDivider
+                  handleRemove={removeDependents}
+                />
               </Box>
             </div>
 
@@ -758,13 +772,13 @@ export function CollaboratorCreate() {
                 errors={errors}
                 mask="(99) 9999-9999"
               />
-              <FormInputText
+              {/* <FormInputText
                 name="email"
                 control={control}
                 label="E-mail"
                 register={register}
                 errors={errors}
-              />
+              /> */}
             </div>
 
             <S.WrapperFooter>
@@ -807,13 +821,20 @@ export function CollaboratorCreate() {
                 mb="4">
                 Dados de Endereço
               </Heading>
-              <FormInputTextMask
+              {/* <FormInputTextMask
                 name="employeeAddress.zipCode"
                 control={control}
                 label="CEP"
                 register={register}
                 errors={errors}
                 mask="99.999-999"
+              /> */}
+              <FormInputText
+                name="employeeAddress.zipCode"
+                control={control}
+                label="CEP"
+                register={register}
+                errors={errors}
               />
               <FormInputText
                 name="employeeAddress.address"
@@ -896,6 +917,7 @@ export function CollaboratorCreate() {
             </S.WrapperFooter>
           </S.RightSide>
         )
+
       case 5:
         return (
           <S.RightSide>
@@ -957,7 +979,7 @@ export function CollaboratorCreate() {
   }
 
   return (
-    <Flex direction="column" h="100vh" bg="gray.50">
+    <Flex direction="column" bg="gray.50">
       <Flex
         width="100%"
         borderBottomStyle="solid"

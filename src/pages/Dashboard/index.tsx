@@ -17,7 +17,7 @@ export function Dashboard() {
         <Header />
       </Flex>
 
-      <Flex direction="row" h="100vh" bg="gray.50">
+      <Flex direction="row" bg="gray.50">
         <Flex>
           <Sidebar />
         </Flex>
