@@ -266,7 +266,7 @@ export function CollaboratorCreate() {
     'Dados Pessoais',
     'Documentos',
     'Dependentes',
-    'Contratos',
+    'Contatos',
     'Endereços',
     'Uploads',
   ]
@@ -466,7 +466,7 @@ export function CollaboratorCreate() {
                 label="Documento de identidade"
                 register={register}
                 errors={errors}
-                mask="99.999.999-9"
+                //mask="99.999.999-9"
                 required
               />
               <FormInputText
