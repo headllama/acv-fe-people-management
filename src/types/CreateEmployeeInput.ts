@@ -5,16 +5,16 @@ import { CreateDependentInput } from './CreateDependentInput'
 export interface CreateEmployeeInput {
   fullName?: string
   cpf?: string
-  birthdate?: Date | string
-  education?: number
-  breed?: number
-  maritalStatus?: number
+  birthdate?: string
+  education?: string
+  breed?: string
+  maritalStatus?: string
   motherName?: string
   fatherName?: string
-  evaluationPeriod?: number
+  evaluationPeriod?: string
   workPeriod?: string
   occupation?: string
-  remuneration?: number
+  remuneration?: string
   admissionDate?: Date | string
   rgDocument?: string
   rgIssuer?: string
@@ -33,4 +33,8 @@ export interface CreateEmployeeInput {
   secondPhone?: string
   employeeAddress?: CreateEmployeeAddressInput
   dependents?: CreateDependentInput[]
+  dependent: {
+    fullName: ''
+    birthdate: ''
+  }
 }

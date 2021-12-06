@@ -77,7 +77,7 @@ export interface Collaborators {
   militaryCertificate: string
   firstPhone: string
   secondPhone: string
-  dependents: Dependent[]
+  dependents?: Dependent[]
   employeeAddress: EmployeeAddress
 }
 

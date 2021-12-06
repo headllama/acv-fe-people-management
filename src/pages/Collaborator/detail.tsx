@@ -22,158 +22,6 @@ import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
 import { SearchEmployeeResult } from '../../types'
 
-const userDataInfo = [
-  {
-    label: 'Nome completo',
-    userData: 'José da Silva Gomes',
-  },
-  {
-    label: 'Data de nascimento',
-    userData: '01/01/1990',
-  },
-  {
-    label: 'CPF',
-    userData: '000.000.000.000',
-  },
-  {
-    label: 'Escolaridade',
-    userData: 'Ensino Superior Completo',
-  },
-  {
-    label: 'Estado Civil',
-    userData: 'Casado',
-  },
-  {
-    label: 'Nome da mãe',
-    userData: 'Maria da Silva Gomes',
-  },
-  {
-    label: 'Salário',
-    userData: 'R$ 1.200,00',
-  },
-  {
-    label: 'Nome do Pai',
-    userData: 'José da Silva Gomes',
-  },
-  {
-    label: 'Cargo',
-    userData: 'Assistente Financeiro',
-  },
-  {
-    label: 'Raça',
-    userData: 'Parda',
-  },
-  {
-    label: 'Horário de Trabalho',
-    userData: '2ª - 6ª Feira',
-  },
-  {
-    label: 'Data de Admissão',
-    userData: '04/10/2021',
-  },
-  {
-    label: 'Contrato de Experiência',
-    userData: '30+60',
-  },
-]
-
-const userDocumentsInfos = [
-  {
-    label: 'RG',
-    userData: '3504844',
-  },
-  {
-    label: 'Emissor',
-    userData: 'SSP',
-  },
-  {
-    label: 'UF',
-    userData: 'ES',
-  },
-  {
-    label: 'Data de Emissão',
-    userData: '01/01/1990',
-  },
-  {
-    label: 'CNH',
-    userData: '3504844089',
-  },
-  {
-    label: 'Categoria',
-    userData: 'AB',
-  },
-  {
-    label: 'Primeira CNH',
-    userData: '01/01/1990',
-  },
-  {
-    label: 'Validade CNH',
-    userData: '01/01/2023',
-  },
-  {
-    label: 'CTPS',
-    userData: '3504844089',
-  },
-  {
-    label: 'Série',
-    userData: '2',
-  },
-  {
-    label: 'UF',
-    userData: 'ES',
-  },
-  {
-    label: 'Data de Emissão',
-    userData: '20/11/2011',
-  },
-  {
-    label: 'PIS',
-    userData: '3504844089',
-  },
-  {
-    label: 'Certificado de Reservista',
-    userData: '3504844089',
-  },
-]
-
-const userAddressData = [
-  {
-    label: 'CEP',
-    userData: '3504844',
-  },
-  {
-    label: 'Cidade / Estado',
-    userData: 'São Paulo - SP',
-  },
-  {
-    label: 'Endereço',
-    userData: 'Rua lorem ipsum',
-  },
-  {
-    label: 'Bairro',
-    userData: 'Consolação',
-  },
-  {
-    label: 'Número',
-    userData: '196',
-  },
-  {
-    label: 'Complemento',
-    userData: 'Apto 00',
-  },
-]
-
-const userContactData = [
-  {
-    label: 'E-mail',
-    userData: 'jose.silva@gmail.com',
-  },
-  {
-    label: 'Número de celular com DDD',
-    userData: '(00) 0000-0000',
-  },
-]
-
 const userDependentsData = [
   {
     label: 'Nome do Cônjuge',
@@ -207,13 +55,171 @@ const dependents = [
 export function CollaboratorDetail() {
   const { id } = useParams<{ id?: string }>()
   const [collaborator, setCollaborator] = useState<SearchEmployeeResult>()
+  const [collaboratorDataInfo, setCollaboratorDataInfo] = useState<any[]>([])
+  const [dependents, setDependents] = useState<any[]>([])
+  const [userContactData, setUserContactData] = useState<any[]>([])
+  const [userAddressData, setUserAddressData] = useState<any[]>([])
+  const [userDocumentsInfos, setUserDocumentsInfos] = useState<any[]>([])
 
   useEffect(() => {
     api.get(`Employees/${id}`).then((response) => {
       console.log(response.data)
       setCollaborator(response.data)
     })
-  }, [])
+  }, [id])
+
+  useEffect(() => {
+    setCollaboratorDataInfo([
+      {
+        label: 'Nome completo',
+        userData: collaborator?.fullName,
+      },
+      {
+        label: 'Data de nascimento',
+        userData: collaborator?.birthdate,
+      },
+      {
+        label: 'CPF',
+        userData: collaborator?.cpf,
+      },
+      {
+        label: 'Escolaridade',
+        userData: collaborator?.education,
+      },
+      {
+        label: 'Estado Civil',
+        userData: collaborator?.maritalStatus,
+      },
+      {
+        label: 'Nome da mãe',
+        userData: collaborator?.motherName,
+      },
+      {
+        label: 'Salário',
+        userData: `R$${collaborator?.remuneration}`,
+      },
+      {
+        label: 'Nome do Pai',
+        userData: collaborator?.fatherName,
+      },
+      {
+        label: 'Cargo',
+        userData: collaborator?.occupation,
+      },
+      {
+        label: 'Raça',
+        userData: collaborator?.breed,
+      },
+      {
+        label: 'Horário de Trabalho',
+        userData: collaborator?.workPeriod,
+      },
+      {
+        label: 'Data de Admissão',
+        userData: collaborator?.admissionDate,
+      },
+      {
+        label: 'Contrato de Experiência',
+        userData: collaborator?.evaluationPeriod,
+      },
+    ])
+    setUserContactData([
+      {
+        label: 'E-mail',
+        userData: 'jose.silva@gmail.com',
+      },
+      {
+        label: 'Número de celular com DDD',
+        userData: collaborator?.firstPhone,
+      },
+    ])
+
+    setUserAddressData([
+      {
+        label: 'CEP',
+        userData: '3504844',
+      },
+      {
+        label: 'Cidade / Estado',
+        userData: 'São Paulo - SP',
+      },
+      {
+        label: 'Endereço',
+        userData: 'Rua lorem ipsum',
+      },
+      {
+        label: 'Bairro',
+        userData: 'Consolação',
+      },
+      {
+        label: 'Número',
+        userData: '196',
+      },
+      {
+        label: 'Complemento',
+        userData: 'Apto 00',
+      },
+    ])
+
+    setUserDocumentsInfos([
+      {
+        label: 'RG',
+        userData: collaborator?.rg?.document,
+      },
+      {
+        label: 'Emissor',
+        userData: collaborator?.rg?.issuer,
+      },
+      {
+        label: 'UF',
+        userData: '-',
+      },
+      {
+        label: 'Data de Emissão',
+        userData: collaborator?.rg?.registerDate,
+      },
+      {
+        label: 'CNH',
+        userData: collaborator?.cnh?.document,
+      },
+      {
+        label: 'Categoria',
+        userData: collaborator?.cnh?.category,
+      },
+      {
+        label: 'Primeira CNH',
+        userData: '-',
+      },
+      {
+        label: 'Validade CNH',
+        userData: collaborator?.cnh?.expiration,
+      },
+      {
+        label: 'CTPS',
+        userData: collaborator?.ctps?.document,
+      },
+      {
+        label: 'Série',
+        userData: collaborator?.ctps?.series,
+      },
+      {
+        label: 'UF',
+        userData: collaborator?.ctps?.state,
+      },
+      {
+        label: 'Data de Emissão',
+        userData: collaborator?.ctps?.registerDate,
+      },
+      {
+        label: 'PIS',
+        userData: collaborator?.pis,
+      },
+      {
+        label: 'Certificado de Reservista',
+        userData: '-',
+      },
+    ])
+  }, [collaborator])
 
   return (
     <Flex direction="column" bg="gray.50" pb="10">
@@ -234,11 +240,7 @@ export function CollaboratorDetail() {
           display="flex"
           alignItems="center">
           <Flex align="center">
-            <Avatar
-              size="md"
-              name="Felipe Leal"
-              src="https://bit.ly/dan-abramov"
-            />
+            <Avatar size="md" name={collaborator?.fullName} mr="2" />
             <Box ml="4" textAlign="left">
               <Flex align="flex-start">
                 <Flex direction="column">
@@ -246,7 +248,7 @@ export function CollaboratorDetail() {
                     {collaborator?.fullName}
                   </Heading>
                   <Text color="gray.800" fontSize="lg">
-                    Assistente Financeiro
+                    {collaborator?.occupation}
                   </Text>
                 </Flex>
                 <Tag
@@ -273,7 +275,7 @@ export function CollaboratorDetail() {
             </Heading>
             <Divider mt="4" borderColor="gray.100" />
             <Flex direction="row" flexWrap="wrap">
-              {userDataInfo.map((dataInfo, index) => {
+              {collaboratorDataInfo.map((dataInfo, index) => {
                 return (
                   <CollaboratorUserData
                     key={index}
