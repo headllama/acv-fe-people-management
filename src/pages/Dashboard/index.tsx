@@ -17,7 +17,7 @@ export function Dashboard() {
         <Header />
       </Flex>
 
-      <Flex direction="row" bg="gray.50">
+      <Flex direction="row" bg="gray.50" width="100%">
         <Flex>
           <Sidebar />
         </Flex>
@@ -38,7 +38,7 @@ export function Dashboard() {
               boxShadow="sm"
               p="8"
               ml="4"
-              minWidth="500px">
+              w="500px">
               <Heading
                 as="h2"
                 size="md"
@@ -56,7 +56,7 @@ export function Dashboard() {
               boxShadow="sm"
               p="8"
               ml="4"
-              minWidth="500px">
+              w="500px">
               <Text fontSize="lg" mb="4">
                 Colaboradores
               </Text>

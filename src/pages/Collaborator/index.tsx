@@ -128,22 +128,22 @@ export function Collaborator() {
               )}
             </Box>
 
-            <Box
-              borderRadius={8}
-              bg="white"
-              boxShadow="sm"
-              p="8"
-              ml="4"
-              minWidth="364px">
-              {statistics && (
+            {statistics && (
+              <Box
+                borderRadius={8}
+                bg="white"
+                boxShadow="sm"
+                p="8"
+                ml="4"
+                minWidth="364px">
                 <ManagementEmployees
                   total={statistics?.total}
                   title="Total de colaboradores"
                   description="Status dos cadastros de colaboradores"
                   states={statistics?.states}
                 />
-              )}
-            </Box>
+              </Box>
+            )}
           </Flex>
         </Flex>
       </Flex>

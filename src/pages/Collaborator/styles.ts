@@ -5,16 +5,9 @@ export const WrapperBox = styled.div`
   display: flex;
   width: 100%;
 `
-export const LeftSide = styled.div`
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 100px;
-`
 
 export const RightSide = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

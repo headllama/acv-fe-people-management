@@ -43,7 +43,7 @@ export const optionsEducation = [
     value: '4',
   },
   {
-    label: 'Ensino Superior Incompleto',
+    label: 'Ensino Superior Cursando',
     value: '5',
   },
   {
@@ -77,15 +77,37 @@ export const optionsMaritalStatus = [
 
 export const optionsPeriodAgreement = [
   {
-    label: 'Trinta Dias',
+    label: '30 + 60 Dias',
     value: '0',
   },
   {
-    label: 'Sessenta Dias',
+    label: 'Sem Experiência',
+    value: '1',
+  },
+]
+
+export const optionsAccountType = [
+  {
+    label: 'Conta Corrente',
+    value: '0',
+  },
+  {
+    label: 'Conta Poupança',
+    value: '1',
+  },
+]
+
+export const optionsPIXType = [
+  {
+    label: 'CPF/CNPJ',
+    value: '0',
+  },
+  {
+    label: 'Telefone',
     value: '1',
   },
   {
-    label: 'Sem Experiência',
+    label: 'E-mail',
     value: '2',
   },
 ]

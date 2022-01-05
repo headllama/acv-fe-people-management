@@ -1,69 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
-  Button,
   Flex,
   Heading,
-  Icon,
   Spacer,
   Avatar,
   Text,
   Tag,
   TagLabel,
-  Link,
   Divider,
 } from '@chakra-ui/react'
 
 import { CollaboratorUserData } from '../../components/CollaboratorUserData'
-import { CustomList } from '../../components/CustomList'
 import { Header } from '../../components/Header'
-import { IoTrashOutline } from 'react-icons/io5'
 import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
 import { api } from '../../services/api'
 import { SearchEmployeeResult } from '../../types'
-
-const userDependentsData = [
-  {
-    label: 'Nome do Cônjuge',
-    userData: 'Marta Lima Gomes',
-  },
-  {
-    label: 'Dependente do IR?',
-    userData: 'Sim',
-  },
-  {
-    label: 'Data de Emissão',
-    userData: '01/01/1990',
-  },
-]
-
-const dependents = [
-  {
-    id: 1,
-    name: 'Pedro Gomes',
-  },
-  {
-    id: 2,
-    name: 'Maria Gomes',
-  },
-  {
-    id: 3,
-    name: 'Paulo Gomes',
-  },
-]
+import { format } from 'date-fns'
+import { CustomListSimple } from '../../components/CustomListSimple'
 
 export function CollaboratorDetail() {
   const { id } = useParams<{ id?: string }>()
   const [collaborator, setCollaborator] = useState<SearchEmployeeResult>()
   const [collaboratorDataInfo, setCollaboratorDataInfo] = useState<any[]>([])
-  const [dependents, setDependents] = useState<any[]>([])
   const [userContactData, setUserContactData] = useState<any[]>([])
   const [userAddressData, setUserAddressData] = useState<any[]>([])
   const [userDocumentsInfos, setUserDocumentsInfos] = useState<any[]>([])
 
   useEffect(() => {
     api.get(`Employees/${id}`).then((response) => {
-      console.log(response.data)
       setCollaborator(response.data)
     })
   }, [id])
@@ -76,7 +42,9 @@ export function CollaboratorDetail() {
       },
       {
         label: 'Data de nascimento',
-        userData: collaborator?.birthdate,
+        userData: collaborator?.birthdate
+          ? format(new Date(collaborator?.birthdate), 'dd/MM/yyyy')
+          : '',
       },
       {
         label: 'CPF',
@@ -116,7 +84,9 @@ export function CollaboratorDetail() {
       },
       {
         label: 'Data de Admissão',
-        userData: collaborator?.admissionDate,
+        userData: collaborator?.admissionDate
+          ? format(new Date(collaborator?.admissionDate), 'dd/MM/yyyy')
+          : '',
       },
       {
         label: 'Contrato de Experiência',
@@ -124,10 +94,10 @@ export function CollaboratorDetail() {
       },
     ])
     setUserContactData([
-      {
-        label: 'E-mail',
-        userData: 'jose.silva@gmail.com',
-      },
+      // {
+      //   label: 'E-mail',
+      //   userData: 'jose.silva@gmail.com',
+      // },
       {
         label: 'Número de celular com DDD',
         userData: collaborator?.firstPhone,
@@ -137,28 +107,28 @@ export function CollaboratorDetail() {
     setUserAddressData([
       {
         label: 'CEP',
-        userData: '3504844',
+        userData: collaborator?.employeeAddress?.zipCode,
       },
       {
         label: 'Cidade / Estado',
-        userData: 'São Paulo - SP',
+        userData: `${collaborator?.employeeAddress?.city} - ${collaborator?.employeeAddress?.state}`,
       },
       {
         label: 'Endereço',
-        userData: 'Rua lorem ipsum',
+        userData: collaborator?.employeeAddress?.address,
       },
       {
         label: 'Bairro',
-        userData: 'Consolação',
+        userData: collaborator?.employeeAddress?.neighborhood,
       },
       {
         label: 'Número',
-        userData: '196',
+        userData: collaborator?.employeeAddress?.number,
       },
-      {
-        label: 'Complemento',
-        userData: 'Apto 00',
-      },
+      // {
+      //   label: 'Complemento',
+      //   userData: 'Apto 00',
+      // },
     ])
 
     setUserDocumentsInfos([
@@ -170,13 +140,15 @@ export function CollaboratorDetail() {
         label: 'Emissor',
         userData: collaborator?.rg?.issuer,
       },
-      {
-        label: 'UF',
-        userData: '-',
-      },
+      // {
+      //   label: 'UF',
+      //   userData: '-',
+      // },
       {
         label: 'Data de Emissão',
-        userData: collaborator?.rg?.registerDate,
+        userData: collaborator?.rg?.registerDate
+          ? format(new Date(collaborator?.rg?.registerDate), 'dd/MM/yyyy')
+          : '',
       },
       {
         label: 'CNH',
@@ -186,13 +158,15 @@ export function CollaboratorDetail() {
         label: 'Categoria',
         userData: collaborator?.cnh?.category,
       },
-      {
-        label: 'Primeira CNH',
-        userData: '-',
-      },
+      // {
+      //   label: 'Primeira CNH',
+      //   userData: '-',
+      // },
       {
         label: 'Validade CNH',
-        userData: collaborator?.cnh?.expiration,
+        userData: collaborator?.cnh?.expiration
+          ? format(new Date(collaborator?.cnh?.expiration), 'dd/MM/yyyy')
+          : '',
       },
       {
         label: 'CTPS',
@@ -208,16 +182,18 @@ export function CollaboratorDetail() {
       },
       {
         label: 'Data de Emissão',
-        userData: collaborator?.ctps?.registerDate,
+        userData: collaborator?.ctps?.registerDate
+          ? format(new Date(collaborator?.ctps?.registerDate), 'dd/MM/yyyy')
+          : '',
       },
       {
         label: 'PIS',
         userData: collaborator?.pis,
       },
-      {
-        label: 'Certificado de Reservista',
-        userData: '-',
-      },
+      // {
+      //   label: 'Certificado de Reservista',
+      //   userData: '-',
+      // },
     ])
   }, [collaborator])
 
@@ -253,12 +229,14 @@ export function CollaboratorDetail() {
                 </Flex>
                 <Tag
                   variant="outline"
-                  colorScheme="green"
+                  colorScheme={collaborator?.isEnabled ? 'green' : 'red'}
                   borderRadius="full"
                   size="lg"
                   ml={3}
                   mt={1}>
-                  <TagLabel>Ativo</TagLabel>
+                  <TagLabel>
+                    {collaborator?.isEnabled ? 'Ativo' : 'Desativado'}
+                  </TagLabel>
                 </Tag>
               </Flex>
             </Box>
@@ -308,28 +286,15 @@ export function CollaboratorDetail() {
               Dependentes
             </Heading>
             <Divider mt="4" borderColor="gray.100" />
-            <Flex direction="row" flexWrap="wrap">
-              {userDependentsData.map((dataInfo, index) => {
-                return (
-                  <CollaboratorUserData
-                    key={index}
-                    label={dataInfo.label}
-                    userData={dataInfo.userData}
-                  />
-                )
-              })}
-            </Flex>
-            <Box mt="6" boxShadow="xl">
-              <Heading
-                as="h2"
-                size="md"
-                color="gray.800"
-                fontFamily="Roboto"
-                mb="4"
-                px="8">
-                Lista de Dependentes para IR
-              </Heading>
-              {/*<CustomList items={dependents} disableLastDivider />*/}
+            <Flex direction="row" flexWrap="wrap"></Flex>
+            <Box mt="6">
+              {collaborator?.dependents && (
+                <CustomListSimple
+                  items={collaborator?.dependents}
+                  disableLastDivider
+                  boxShadow="none"
+                />
+              )}
             </Box>
           </Box>
           <Box p={8} mt="4" bg="white" borderRadius={8}>
@@ -367,7 +332,7 @@ export function CollaboratorDetail() {
             </Flex>
           </Box>
         </Box>
-
+        {/* 
         <Box
           borderRadius={8}
           bg="white"
@@ -401,7 +366,7 @@ export function CollaboratorDetail() {
               Desativar Colaborador
             </Text>
           </Link>
-        </Box>
+        </Box> */}
       </Flex>
     </Flex>
   )

@@ -18,7 +18,7 @@ export interface SearchEmployeeResult {
   evaluationPeriod?: EEvaluationPeriod | string | number
   workPeriod?: string
   occupation?: string
-  remuneration?: number
+  remuneration?: string
   admissionDate?: Date | string
   rg?: Rg
   cnh?: Cnh

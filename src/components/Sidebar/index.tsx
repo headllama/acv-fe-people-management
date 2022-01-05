@@ -14,12 +14,14 @@ export function Sidebar() {
       bg="white"
       boxShadow="0 4px 12px 0 rgba(0, 0, 0, 0.05)"
       flexDir="column"
-      h="89vh"
+      h="100vh"
       justifyContent="space-between"
-      pl={2}
+      p={4}
       left="5"
       pos="sticky"
-      w={navSize == 'small' ? '75px' : '350px'}>
+      width="100%"
+      minWidth="300px"
+      maxWidth={navSize == 'small' ? '75px' : '350px'}>
       <Flex
         p="5%"
         flexDir="column"

@@ -45,7 +45,7 @@ export type children = { children: ReactNode }
 
 export interface Dependent {
   fullName: string
-  birthdate: string
+  birthdate: Date
   cpf: string
 }
 
@@ -99,6 +99,13 @@ export interface CollaboratorsCreate extends Collaborators {
     birthdate: string
     cpf: string
   }
+  bankBranch: string
+  bankAccount: string
+  bank: string
+  bankCode: string
+  bankAccountType: string
+  pixKey: string
+  pixKeyType: string
 }
 
 export interface CollaboratorsGet extends Collaborators {

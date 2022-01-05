@@ -19,7 +19,7 @@ export function NavItem({ icon, title, active, navSize, header, link }: any) {
           to={`/${link}`}
           backgroundColor={active && '#FF4F4F'}
           p={3}
-          rounded={40}
+          rounded={50}
           w="full"
           _hover={{ textDecor: 'none', backgroundColor: 'none' }}>
           <MenuButton w="100%">
@@ -30,7 +30,7 @@ export function NavItem({ icon, title, active, navSize, header, link }: any) {
                 color={active ? 'white' : 'gray.500'}
               />
               <Text
-                ml={5}
+                ml={2}
                 display={navSize == 'small' ? 'none' : 'flex'}
                 color={active ? 'white' : 'gray.500'}>
                 {title}
