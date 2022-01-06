@@ -6,7 +6,7 @@ import { FormLogin } from '../../components/FormLogin'
 
 export function SignIn() {
   return (
-    <Flex direction="row">
+    <Flex direction="row" background="#FFF">
       <SideLogin />
       <FormLogin />
     </Flex>

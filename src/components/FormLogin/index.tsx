@@ -32,7 +32,12 @@ export function FormLogin() {
 
   return (
     <Flex w={['100%', '100%', '50%']} h="100vh" align="center" justify="center">
-      <Flex as="form" direction="column" width="100%" maxWidth={360}>
+      <Flex
+        as="form"
+        direction="column"
+        width="100%"
+        maxWidth={360}
+        background="#FFF">
         {renderSteps()}
       </Flex>
     </Flex>

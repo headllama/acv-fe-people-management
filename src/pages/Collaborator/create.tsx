@@ -210,26 +210,21 @@ export function CollaboratorCreate() {
       remuneration: remuneration,
       admissionDate: admissionDate,
 
-      rg: {
-        document: data.rgDocument,
-        issuer: data.rgIssuer,
-        registerDate: rgRegisterDate,
-      },
+      rgDocument: data.rgDocument,
+      rgIssuer: data.rgIssuer,
+      rgRegisterDate: rgRegisterDate,
 
-      cnh: {
-        document: data.cnhDocument,
-        category: data.cnhCategory,
-        registerDate: cnhRegisterDate,
-        expiration: cnhExpiration,
-        // firstCNH: parseInt(data.firstCNH),
-      },
+      cnhDocument: data.cnhDocument,
+      cnhCategory: data.cnhCategory,
+      cnhRegisterDate: cnhRegisterDate,
+      cnhExpiration: cnhExpiration,
+      // firstCNH: parseInt(data.firstCNH),
 
-      ctps: {
-        document: data.ctpsDocument,
-        series: data.ctpsSeries,
-        state: data.ctpsState,
-        registerDate: ctpsRegisterDate,
-      },
+      ctpsDocument: data.ctpsDocument,
+      ctpsSeries: data.ctpsSeries,
+      ctpsState: data.ctpsState,
+      ctpsRegisterDate: ctpsRegisterDate,
+
       militaryCertificate: data.militaryCertificate,
       pis: data.pis,
 
