@@ -27,6 +27,7 @@ export function CollaboratorDetail() {
   const [userContactData, setUserContactData] = useState<any[]>([])
   const [userAddressData, setUserAddressData] = useState<any[]>([])
   const [userDocumentsInfos, setUserDocumentsInfos] = useState<any[]>([])
+  const [bankDataInfos, setBankDataInfos] = useState<any[]>([])
 
   useEffect(() => {
     api.get(`Employees/${id}`).then((response) => {
@@ -93,6 +94,38 @@ export function CollaboratorDetail() {
         userData: collaborator?.evaluationPeriod,
       },
     ])
+
+    setBankDataInfos([
+      {
+        label: 'Banco',
+        userData: '',
+      },
+      {
+        label: 'Cód. do Banco',
+        userData: '',
+      },
+      {
+        label: 'Agência',
+        userData: '',
+      },
+      {
+        label: 'Conta',
+        userData: '',
+      },
+      {
+        label: 'Tipo de Conta',
+        userData: '',
+      },
+      {
+        label: 'Chave Pix',
+        userData: '',
+      },
+      {
+        label: 'Tipo da Chave Pix',
+        userData: '',
+      },
+    ])
+
     setUserContactData([
       // {
       //   label: 'E-mail',
@@ -271,6 +304,23 @@ export function CollaboratorDetail() {
             <Divider mt="4" borderColor="gray.100" />
             <Flex direction="row" flexWrap="wrap">
               {userDocumentsInfos.map((dataInfo, index) => {
+                return (
+                  <CollaboratorUserData
+                    key={index}
+                    label={dataInfo.label}
+                    userData={dataInfo.userData}
+                  />
+                )
+              })}
+            </Flex>
+          </Box>
+          <Box p={8} mt="4" bg="white" borderRadius={8}>
+            <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
+              Dados Bancários
+            </Heading>
+            <Divider mt="4" borderColor="gray.100" />
+            <Flex direction="row" flexWrap="wrap">
+              {bankDataInfos.map((dataInfo, index) => {
                 return (
                   <CollaboratorUserData
                     key={index}

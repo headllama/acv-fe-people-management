@@ -70,7 +70,8 @@ export function CollaboratorCreate() {
   const [ctpsRegisterDate, setCtpsRegisterDate] = useState<Date>(new Date())
   const [dependentBirthdate, setDependentBirthdate] = useState<Date>(new Date())
 
-  const [remuneration, setRemuneration] = useState('0,00')
+  const [remuneration, setRemuneration] = useState('')
+  console.log(remuneration)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [defaultValues, setDefaultValues] = useState<CollaboratorsCreate>({
@@ -252,6 +253,11 @@ export function CollaboratorCreate() {
       pixKey: data.pixKey,
       pixKeyType: parseInt(data.pixKeyType),
     }
+
+    console.log(remuneration)
+    console.log(remuneration.toString())
+    console.log(collaboratorCreate.remuneration)
+
     setCollaboratorForm({ ...collaboratorForm, ...collaboratorCreate })
     createCollaborator(collaboratorCreate)
   }
@@ -288,6 +294,9 @@ export function CollaboratorCreate() {
         cpf: dependent.cpf,
       }
       setDependents([...dependents, item])
+
+      setValue('dependent.fullName', '')
+      setValue('dependent.cpf', '')
     }
   }
 
@@ -864,6 +873,7 @@ export function CollaboratorCreate() {
                 </Flex>
               </AccordionPanel>
             </AccordionItem>
+
             <AccordionItem>
               <AccordionButton>
                 <Box flex="1" textAlign="left">

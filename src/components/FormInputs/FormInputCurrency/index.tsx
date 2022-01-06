@@ -22,8 +22,7 @@ export const FormInputCurrency = ({ onChange, label, name, errors }: Props) => {
         decimalSeparator=","
         groupSeparator="."
         decimalScale={2}
-        defaultValue={'0,00'}
-        decimalsLimit={2}
+        defaultValue={0}
         style={{
           border: '1px solid #9699B0 ',
           borderRadius: '6px',
@@ -32,6 +31,7 @@ export const FormInputCurrency = ({ onChange, label, name, errors }: Props) => {
         }}
         onValueChange={(value, name) => {
           onChange(value)
+          console.log(value, name)
         }}
       />
       <FormErrorMessage>
