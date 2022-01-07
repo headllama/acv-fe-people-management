@@ -20,6 +20,13 @@ export interface SearchEmployeeResult {
   occupation?: string
   remuneration?: string
   admissionDate?: Date | string
+  bankBranch: string | undefined
+  bankAccount: string | undefined
+  bank: string | undefined
+  bankCode: string | undefined
+  bankAccountType: string | number
+  pixKey: string | undefined
+  pixKeyType: string | number
   rg?: Rg
   cnh?: Cnh
   ctps?: Ctps

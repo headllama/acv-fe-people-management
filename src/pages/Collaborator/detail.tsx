@@ -28,6 +28,7 @@ export function CollaboratorDetail() {
   const [userAddressData, setUserAddressData] = useState<any[]>([])
   const [userDocumentsInfos, setUserDocumentsInfos] = useState<any[]>([])
   const [bankDataInfos, setBankDataInfos] = useState<any[]>([])
+  const [userBank, setUserBank] = useState<any[]>([])
 
   useEffect(() => {
     api.get(`Employees/${id}`).then((response) => {
@@ -36,6 +37,37 @@ export function CollaboratorDetail() {
   }, [id])
 
   useEffect(() => {
+    setUserBank([
+      {
+        label: 'Banco',
+        userData: collaborator?.bank,
+      },
+      {
+        label: 'Cód. do Banco',
+        userData: collaborator?.bankCode,
+      },
+      {
+        label: 'Agência',
+        userData: collaborator?.bankBranch,
+      },
+      {
+        label: 'Conta',
+        userData: collaborator?.bankAccount,
+      },
+      {
+        label: 'Tipo de Conta',
+        userData: collaborator?.bankAccountType,
+      },
+      {
+        label: 'Chave Pix',
+        userData: collaborator?.pixKey,
+      },
+      {
+        label: 'Tipo da Chave Pix',
+        userData: collaborator?.pixKeyType,
+      },
+    ])
+
     setCollaboratorDataInfo([
       {
         label: 'Nome completo',
@@ -92,37 +124,6 @@ export function CollaboratorDetail() {
       {
         label: 'Contrato de Experiência',
         userData: collaborator?.evaluationPeriod,
-      },
-    ])
-
-    setBankDataInfos([
-      {
-        label: 'Banco',
-        userData: '',
-      },
-      {
-        label: 'Cód. do Banco',
-        userData: '',
-      },
-      {
-        label: 'Agência',
-        userData: '',
-      },
-      {
-        label: 'Conta',
-        userData: '',
-      },
-      {
-        label: 'Tipo de Conta',
-        userData: '',
-      },
-      {
-        label: 'Chave Pix',
-        userData: '',
-      },
-      {
-        label: 'Tipo da Chave Pix',
-        userData: '',
       },
     ])
 
@@ -314,13 +315,14 @@ export function CollaboratorDetail() {
               })}
             </Flex>
           </Box>
+
           <Box p={8} mt="4" bg="white" borderRadius={8}>
             <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
-              Dados Bancários
+              Dados bancários
             </Heading>
             <Divider mt="4" borderColor="gray.100" />
             <Flex direction="row" flexWrap="wrap">
-              {bankDataInfos.map((dataInfo, index) => {
+              {userBank.map((dataInfo, index) => {
                 return (
                   <CollaboratorUserData
                     key={index}
@@ -364,6 +366,7 @@ export function CollaboratorDetail() {
               })}
             </Flex>
           </Box>
+
           <Box p={8} mt="4" bg="white" borderRadius={8}>
             <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
               Dados para contato

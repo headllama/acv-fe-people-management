@@ -133,8 +133,7 @@ export function CollaboratorCreate() {
   const [ufs, setUfs] = useState<UF[]>([])
   const [collaboradorID, setCollaboradorID] = useState()
   const [loading, setLoading] = useState(false)
-  const [collaboratorForm, setCollaboratorForm] =
-    useState<UpdateEmployeeInput>()
+  const [collaboratorForm, setCollaboratorForm] = useState<any>()
 
   useEffect(() => {
     ibgeApi.get('estados?orderBy=nome').then((response) => {
@@ -248,7 +247,7 @@ export function CollaboratorCreate() {
       bankBranch: data.bankBranch,
       bankAccount: data.bankAccount,
       bank: data.bank,
-      banckCode: data.bankCode,
+      bankCode: data.bankCode,
       bankAccountType: parseInt(data.bankAccountType),
       pixKey: data.pixKey,
       pixKeyType: parseInt(data.pixKeyType),

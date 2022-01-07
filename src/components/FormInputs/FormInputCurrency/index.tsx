@@ -22,7 +22,6 @@ export const FormInputCurrency = ({ onChange, label, name, errors }: Props) => {
         decimalSeparator=","
         groupSeparator="."
         decimalScale={2}
-        defaultValue={0}
         style={{
           border: '1px solid #9699B0 ',
           borderRadius: '6px',
