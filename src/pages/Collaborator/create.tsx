@@ -25,6 +25,7 @@ import { useHistory } from 'react-router-dom'
 import { FormInputText } from '../../components/FormInputs/FormInputText'
 import { FormInputTextMask } from '../../components/FormInputs/FormInputTextMask'
 import { FormInputDropdown } from '../../components/FormInputs/FormInputDropdown'
+import { FormInputDropdownNoValidation } from '../../components/FormInputs/FormInputDropdownNoValidation'
 import {
   optionsBreed,
   optionsEducation,
@@ -71,7 +72,6 @@ export function CollaboratorCreate() {
   const [dependentBirthdate, setDependentBirthdate] = useState<Date>(new Date())
 
   const [remuneration, setRemuneration] = useState('')
-  console.log(remuneration)
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [defaultValues, setDefaultValues] = useState<CollaboratorsCreate>({
@@ -187,6 +187,7 @@ export function CollaboratorCreate() {
 
   const onSubmit = (data: CollaboratorsCreate) => {
     setLoading(true)
+
     const dependentsData = dependents.map((dependent) => {
       return {
         fullName: dependent.fullName,
@@ -194,7 +195,6 @@ export function CollaboratorCreate() {
         cpf: dependent.cpf,
       }
     })
-
     const collaboratorCreate = {
       fullName: data.fullName,
       cpf: data.cpf,
@@ -252,10 +252,6 @@ export function CollaboratorCreate() {
       pixKey: data.pixKey,
       pixKeyType: parseInt(data.pixKeyType),
     }
-
-    console.log(remuneration)
-    console.log(remuneration.toString())
-    console.log(collaboratorCreate.remuneration)
 
     setCollaboratorForm({ ...collaboratorForm, ...collaboratorCreate })
     createCollaborator(collaboratorCreate)
@@ -444,6 +440,7 @@ export function CollaboratorCreate() {
                     name="remuneration"
                     errors={errors}
                     onChange={(e) => {
+                      setRemuneration(e)
                       if (!e) {
                         setError('remuneration', {
                           type: 'required',
@@ -452,7 +449,6 @@ export function CollaboratorCreate() {
                       } else {
                         clearErrors(['remuneration'])
                       }
-                      setRemuneration(remuneration)
                     }}
                     label="Salário"
                   />
@@ -499,7 +495,6 @@ export function CollaboratorCreate() {
                     label="Documento de identidade"
                     register={register}
                     errors={errors}
-                    mask="99.999.999-9"
                     required
                   />
                   <FormInputText
@@ -557,7 +552,7 @@ export function CollaboratorCreate() {
                   />
                 </Flex>
                 <Flex direction="row">
-                  <FormInputDropdown
+                  <FormInputDropdownNoValidation
                     name="firstCNH"
                     control={control}
                     label="Primeira Habilitação"
@@ -580,14 +575,14 @@ export function CollaboratorCreate() {
                     errors={errors}
                     selectedDate={cnhRegisterDate}
                     onChange={(e) => {
-                      if (!e) {
-                        setError('cnhRegisterDate', {
-                          type: 'required',
-                          message: 'Campo é obrigatório',
-                        })
-                      } else {
-                        clearErrors(['cnhRegisterDate'])
-                      }
+                      // if (!e) {
+                      //   setError('cnhRegisterDate', {
+                      //     type: 'required',
+                      //     message: 'Campo é obrigatório',
+                      //   })
+                      // } else {
+                      //   clearErrors(['cnhRegisterDate'])
+                      // }
                       setCnhRegisterDate(e)
                     }}
                     label="Data de Emissão"
@@ -598,14 +593,14 @@ export function CollaboratorCreate() {
                     errors={errors}
                     selectedDate={cnhExpiration}
                     onChange={(e) => {
-                      if (!e) {
-                        setError('cnhExpiration', {
-                          type: 'required',
-                          message: 'Campo é obrigatório',
-                        })
-                      } else {
-                        clearErrors(['cnhExpiration'])
-                      }
+                      // if (!e) {
+                      //   setError('cnhExpiration', {
+                      //     type: 'required',
+                      //     message: 'Campo é obrigatório',
+                      //   })
+                      // } else {
+                      //   clearErrors(['cnhExpiration'])
+                      // }
                       setCnhExpiration(e)
                     }}
                     label="Validade da CNH"
@@ -618,6 +613,7 @@ export function CollaboratorCreate() {
                     label="Carteira de Trabalho"
                     register={register}
                     errors={errors}
+                    required
                   />
                   <FormInputText
                     name="ctpsSeries"
@@ -625,6 +621,7 @@ export function CollaboratorCreate() {
                     label="Série"
                     register={register}
                     errors={errors}
+                    required
                   />
                 </Flex>
                 <Flex direction="row">
@@ -896,7 +893,7 @@ export function CollaboratorCreate() {
                     errors={errors}
                   />
                   <FormInputText
-                    name="banckCode"
+                    name="bankCode"
                     control={control}
                     label="Cód. Banco"
                     register={register}
@@ -919,14 +916,13 @@ export function CollaboratorCreate() {
                     register={register}
                     errors={errors}
                   />
-                  <FormInputDropdown
+                  <FormInputDropdownNoValidation
                     name="bankAccountType"
                     control={control}
                     label="Tipo de conta"
                     register={register}
                     errors={errors}
                     options={optionsAccountType}
-                    required
                   />
                 </Flex>
 
@@ -938,14 +934,13 @@ export function CollaboratorCreate() {
                     register={register}
                     errors={errors}
                   />
-                  <FormInputDropdown
+                  <FormInputDropdownNoValidation
                     name="pixKeyType"
                     control={control}
                     label="Tipo PIX"
                     register={register}
                     errors={errors}
                     options={optionsPIXType}
-                    required
                   />
                 </Flex>
               </AccordionPanel>
