@@ -50,6 +50,7 @@ export function CustomModal({
                 fontSize="lg"
                 colorScheme="red"
                 mr={3}
+                type="submit"
                 style={{
                   borderRadius: '50px',
                   fontFamily: 'Roboto',

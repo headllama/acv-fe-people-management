@@ -16,9 +16,12 @@ export const FormInputDropdownNoValidation: React.FC<FormInputDropdownProps> =
   ({ name, control, label, register, errors, options }) => {
     const generateSingleOptions = () => {
       return options
-        ? options.map((option: FormInputDropdownOptionsProps) => {
+        ? options.map((option: FormInputDropdownOptionsProps, index) => {
             return (
-              <option key={option.value} value={option.value}>
+              <option
+                selected={index === 0}
+                key={option.value}
+                value={option.value}>
                 {option.label}
               </option>
             )
@@ -34,18 +37,16 @@ export const FormInputDropdownNoValidation: React.FC<FormInputDropdownProps> =
         isInvalid={errors[name] ? true : false}>
         <FormLabel style={{ fontSize: '14px' }}>{label}</FormLabel>
         <Controller
+          control={control}
+          name={name}
           render={({ field: { value } }) => (
             <Select
-              placeholder="Selecione uma opção"
+              {...register(name)}
               value={value}
-              {...register(name, {
-                // required: 'Campo é obrigatório',
-              })}>
+              placeholder="Selecione uma opção">
               {generateSingleOptions()}
             </Select>
           )}
-          control={control}
-          name={name}
         />
         <FormErrorMessage>
           {errors[name] && errors[name].message}

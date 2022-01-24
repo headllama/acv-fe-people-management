@@ -1,27 +1,53 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from 'react'
+import moment from 'moment'
 import {
   Box,
   Button,
   Flex,
-  FormControl,
   FormLabel,
   Heading,
   Icon,
   Input,
   InputGroup,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
   InputRightElement,
   Spacer,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useToast,
+  MenuButton,
+  IconButton,
+  Menu,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/react'
 
-import { CustomModal } from '../../components/CustomModal'
+import { api } from '../../services/api'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Header } from '../../components/Header'
+import * as yup from 'yup'
 import { IoAddCircleOutline } from 'react-icons/io5'
 import { IoSearchOutline } from 'react-icons/io5'
+import { MdMoreVert, MdEdit, MdOutlineDelete } from 'react-icons/md'
 import { ManagementEmployees } from '../../components/ManagementEmployees'
 import { NoResults } from '../../components/NoResults'
 import { Pagination } from '../../components/Pagination'
 import { Sidebar } from '../../components/Sidebar'
-import { useState } from 'react'
 import CustomDatePicker from '../../components/DatePicker'
+import { useForm } from 'react-hook-form'
+import { CustomInput } from '../../components/Form/CustomInput'
+import { TrainingProps } from '../../types/Trainings'
 
 const states = [
   {
@@ -38,26 +64,75 @@ const states = [
   },
 ]
 
-const trainings = [
-  {
-    name: 'Operar de Empilhadeira',
-  },
-  {
-    name: 'Operador de Muck',
-  },
-  {
-    name: 'Operar de Empilhadeira',
-  },
-  {
-    name: 'Operador de Muck',
-  },
-]
-
-const hasList = true
+const signInFormSchema = yup.object().shape({
+  name: yup.string().required('Nome do treinamento obrigatório'),
+  hours: yup.string().required('Carga horária obrigatória'),
+})
 
 export function Training() {
   const [startDate, setStartDate] = useState(new Date())
   const [modalIsOpen, setModalOpen] = useState(false)
+  const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false)
+  const [selectedTraining, setSelectedTraining] =
+    useState<TrainingProps | null>()
+  const [trainings, setTrainings] = useState<TrainingProps[]>([])
+  const toast = useToast()
+  const { register, handleSubmit, formState } = useForm({
+    resolver: yupResolver(signInFormSchema),
+  })
+
+  useEffect(() => {
+    api.get('/Training').then((response) => {
+      setTrainings(response.data)
+    })
+  }, [])
+
+  const handleCreateTraining = (date: { name: string; hours: string }) => {
+    const dateFormated = startDate.toISOString()
+    api
+      .post('Training', {
+        trainingName: date.name,
+        workload: date.hours,
+        validDate: dateFormated,
+      })
+      .then((response) => {
+        const newTraining = {
+          id: response.data,
+          workload: date.hours,
+          name: date.name,
+          validDate: dateFormated,
+        }
+
+        setTrainings([...trainings, newTraining])
+        toast({
+          title: 'Treinamento criado com sucesso',
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        })
+      })
+      .catch(() => {
+        toast({
+          title: 'Ops! Aconteceu algum error ao criar o treinamento',
+          description: 'Verifique se a data limite está correta',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        })
+      })
+    setModalOpen(false)
+  }
+
+  const handleOpenDeleteTraining = (training: TrainingProps) => {
+    setModalDeleteIsOpen(true)
+    setSelectedTraining(training)
+    console.log(training)
+  }
+
+  const handleCloseDeleteTraining = () => {
+    setModalDeleteIsOpen(false)
+    setSelectedTraining(null)
+  }
 
   return (
     <>
@@ -111,12 +186,50 @@ export function Training() {
                   />
                 </InputGroup>
               </Box>
-              {hasList ? (
+              {trainings.length > 0 ? (
                 <>
-                  {/* <CustomList items={trainings} /> */}
-                  <Flex align="center" justify="center">
+                  <Table variant="simple" overflowY="scroll">
+                    <Thead>
+                      <Tr>
+                        <Th>Nome</Th>
+                        <Th>Carga horária</Th>
+                        <Th>Data limite</Th>
+                        <Th></Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {trainings.map((item) => (
+                        <Tr key={item.id}>
+                          <Td>{item.name}</Td>
+                          <Td textAlign="center">{item.workload}</Td>
+                          <Td>{moment(item.validDate).format('MM/DD/YYYY')}</Td>
+                          <Td>
+                            <Menu>
+                              <MenuButton
+                                as={IconButton}
+                                aria-label="Options"
+                                icon={<MdMoreVert />}
+                                variant="unstiled"
+                              />
+                              <MenuList>
+                                <MenuItem icon={<MdEdit />}>Editar</MenuItem>
+                                <MenuItem
+                                  onClick={() => handleOpenDeleteTraining(item)}
+                                  color="red"
+                                  icon={<MdOutlineDelete />}>
+                                  Excluir
+                                </MenuItem>
+                              </MenuList>
+                            </Menu>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+
+                  {/* <Flex align="center" justify="center">
                     <Pagination />
-                  </Flex>
+                  </Flex> */}
                 </>
               ) : (
                 <Flex align="center" justify="center" p={10}>
@@ -140,28 +253,77 @@ export function Training() {
               />
             </Box>
           </Flex>
-          <CustomModal
-            title={'Cadastro de Treinamento'}
-            handleOpenModal={modalIsOpen}
-            closeModal={() => setModalOpen(false)}>
-            <FormControl mt={4}>
-              <FormLabel>Treinamento</FormLabel>
-              <Input placeholder="Treinamento" />
-            </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Carga horária</FormLabel>
-              <Input placeholder="Carga horária" />
-            </FormControl>
+          <Modal
+            isCentered
+            isOpen={modalDeleteIsOpen}
+            onClose={() => setModalDeleteIsOpen(false)}>
+            <ModalOverlay />
 
-            <FormControl mt={4}>
-              <FormLabel>Validade</FormLabel>
-              <CustomDatePicker
-                selectedDate={startDate}
-                onChange={(date) => setStartDate(new Date())}
-              />
-            </FormControl>
-          </CustomModal>
+            <ModalContent>
+              <ModalHeader>
+                Deseja excluir o {selectedTraining?.name}?
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalFooter>
+                <Button mr={3} onClick={handleCloseDeleteTraining}>
+                  Cancelar
+                </Button>
+                <Button
+                  background="red"
+                  color="white"
+                  type="submit"
+                  variant="red">
+                  Excluir
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal isOpen={modalIsOpen} onClose={() => setModalOpen(false)}>
+            <ModalOverlay />
+
+            <ModalContent>
+              <form onSubmit={handleSubmit(handleCreateTraining)}>
+                <ModalHeader>Novo treinamento</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <CustomInput
+                    label="Treinamento"
+                    {...register('name')}
+                    error={formState.errors.name}
+                    placeholder="Treinamento"
+                  />
+
+                  <CustomInput
+                    label="Carga Horária"
+                    {...register('hours')}
+                    error={formState.errors.hours}
+                    placeholder="Carga horária"
+                  />
+
+                  <FormLabel>Validade</FormLabel>
+                  <CustomDatePicker
+                    selectedDate={startDate}
+                    onChange={(date) => setStartDate(date)}
+                  />
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button mr={3} onClick={() => setModalOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    background="red"
+                    color="white"
+                    type="submit"
+                    variant="red">
+                    Salvar
+                  </Button>
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
         </Flex>
       </Flex>
     </>

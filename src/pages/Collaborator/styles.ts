@@ -22,6 +22,7 @@ type CircleProps = {
   active?: boolean
   lastChild?: boolean
 }
+
 export const Circle = styled.div<CircleProps>`
   ${({ active, lastChild }) => css`
     width: 16px;

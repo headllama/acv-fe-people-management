@@ -7,7 +7,7 @@ export function NavItem({ icon, title, active, navSize, header, link }: any) {
       mt={4}
       flexDir="column"
       w="100%"
-      alignItems={navSize == 'small' ? 'center' : 'flex-start'}>
+      alignItems={navSize === 'small' ? 'center' : 'flex-start'}>
       <Menu placement="right">
         {header && (
           <Text fontSize="lg" color="gray.500" mb={4}>

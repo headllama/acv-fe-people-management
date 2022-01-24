@@ -77,6 +77,7 @@ export interface Collaborators {
   militaryCertificate: string
   firstPhone: string
   secondPhone: string
+  email?: string
   dependents?: Dependent[]
   employeeAddress: EmployeeAddress
 }
@@ -85,6 +86,24 @@ export interface CollaboratorsCreate extends Collaborators {
   rgDocument: string
   rgIssuer: string
   rgRegisterDate: string
+  rg?: {
+    document: string
+    issuer: string
+    registerDate: any
+    uf: string
+  }
+  cnh?: {
+    document: string
+    category: string
+    registerDate: any
+    expiration: any
+  }
+  ctps?: {
+    document: string
+    series: string
+    registerDate: any
+    state: string
+  }
   cnhDocument: string
   cnhCategory: string
   cnhRegisterDate: string
@@ -96,7 +115,7 @@ export interface CollaboratorsCreate extends Collaborators {
   firstCNH: string
   dependent: {
     fullName: string
-    birthdate: string
+    birthdate: any
     cpf: string
   }
   bankBranch: string
@@ -106,6 +125,7 @@ export interface CollaboratorsCreate extends Collaborators {
   bankAccountType: string
   pixKey: string
   pixKeyType: string
+  remuneration: string
 }
 
 export interface CollaboratorsGet extends Collaborators {

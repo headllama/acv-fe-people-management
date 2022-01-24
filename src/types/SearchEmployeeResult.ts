@@ -40,4 +40,5 @@ export interface SearchEmployeeResult {
   updatedOn?: Date | string
   dependents?: DependentViewModel[]
   employeeAddress?: EmployeeAddressViewModel
+  email?: string
 }

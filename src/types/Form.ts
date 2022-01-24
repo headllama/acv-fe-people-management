@@ -9,7 +9,7 @@ export interface FormInputProps {
   name: string
   control: any
   register: UseFormRegister<any>
-  errors: FieldErrors<any>
+  errors?: FieldErrors<any>
   label: string
   setValue?: any
   required?: boolean

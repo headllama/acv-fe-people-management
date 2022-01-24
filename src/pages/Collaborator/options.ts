@@ -21,6 +21,17 @@ export const optionsBreed = [
   },
 ]
 
+export const optionsFirstCNH = [
+  {
+    label: 'Sim',
+    value: '0',
+  },
+  {
+    label: 'Não',
+    value: '1',
+  },
+]
+
 export const optionsEducation = [
   {
     label: 'Sem Instrução',

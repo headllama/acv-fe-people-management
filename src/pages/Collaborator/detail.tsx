@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
@@ -8,31 +9,72 @@ import {
   Text,
   Tag,
   TagLabel,
+  Stack,
+  Link,
   Divider,
+  Icon,
+  Button,
 } from '@chakra-ui/react'
 
+import { motion } from 'framer-motion'
+import { IoTrashOutline } from 'react-icons/io5'
+import { FaUserEdit } from 'react-icons/fa'
+import { IoMdCloudDownload } from 'react-icons/io'
+
+import { useHistory } from 'react-router-dom'
 import { CollaboratorUserData } from '../../components/CollaboratorUserData'
 import { Header } from '../../components/Header'
 import { useParams } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { api } from '../../services/api'
 import { SearchEmployeeResult } from '../../types'
 import { format } from 'date-fns'
 import { CustomListSimple } from '../../components/CustomListSimple'
 
+const MotionFlex = motion(Flex)
+
+const variants = {
+  open: { opacity: 1, x: 0 },
+  closed: { opacity: 0, x: '-100%' },
+}
+
+interface userFiles {
+  fileName: string
+  fileTypeId: string
+  id: string
+  tag: string
+}
+
 export function CollaboratorDetail() {
   const { id } = useParams<{ id?: string }>()
+  const history = useHistory()
+  const [alertOpen, setAlertOpen] = useState(false)
   const [collaborator, setCollaborator] = useState<SearchEmployeeResult>()
   const [collaboratorDataInfo, setCollaboratorDataInfo] = useState<any[]>([])
   const [userContactData, setUserContactData] = useState<any[]>([])
   const [userAddressData, setUserAddressData] = useState<any[]>([])
   const [userDocumentsInfos, setUserDocumentsInfos] = useState<any[]>([])
+  const [userFiles, setUserFiles] = useState<userFiles[] | undefined>([])
   const [bankDataInfos, setBankDataInfos] = useState<any[]>([])
   const [userBank, setUserBank] = useState<any[]>([])
+  const cancelRef = useRef()
+
+  useEffect(() => {
+    api
+      .get(`/Files/Employee/${id}`)
+      .then((response) => setUserFiles(response.data))
+  }, [id])
+
+  useEffect(() => {
+    api
+      .get(`/Files/Employee/${id}`)
+      .then((response) => setUserFiles(response.data))
+  }, [id])
 
   useEffect(() => {
     api.get(`Employees/${id}`).then((response) => {
       setCollaborator(response.data)
+      console.log(response.data, 'teste')
     })
   }, [id])
 
@@ -128,10 +170,11 @@ export function CollaboratorDetail() {
     ])
 
     setUserContactData([
-      // {
-      //   label: 'E-mail',
-      //   userData: 'jose.silva@gmail.com',
-      // },
+      {
+        label: 'E-mail',
+        //@ts-ignore
+        userData: collaborator?.email,
+      },
       {
         label: 'Número de celular com DDD',
         userData: collaborator?.firstPhone,
@@ -230,6 +273,26 @@ export function CollaboratorDetail() {
       // },
     ])
   }, [collaborator])
+
+  // function to create a pdf and download him
+  const handleDownloadFile = async (id: any) => {
+    window.open(
+      `https://acv-ms-people-management.azurewebsites.net/Files/${id}`,
+      '_blank'
+    )
+  }
+
+  const handleDesactiveCollaborator = (id: string) => {
+    api
+      .post(`Employees/${id}/disable`)
+      //@ts-ignore
+      .then(() => setCollaborator({ ...collaborator, isEnabled: false }))
+      .catch((error) => {
+        console.log(error)
+      })
+
+    setAlertOpen(false)
+  }
 
   return (
     <Flex direction="column" bg="gray.50" pb="10">
@@ -385,41 +448,108 @@ export function CollaboratorDetail() {
             </Flex>
           </Box>
         </Box>
-        {/* 
-        <Box
-          borderRadius={8}
-          bg="white"
-          boxShadow="sm"
-          p="8"
-          ml="4"
-          minWidth="364px"
-          h="200px">
-          <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
-            Documentos
-          </Heading>
-          <Divider m="3px" borderColor="gray.100" />
-          <Button
-            as="a"
-            size="lg"
-            fontSize="lg"
-            colorScheme="red"
-            isFullWidth
-            mt={4}
-            style={{
-              borderRadius: '50px',
-              fontFamily: 'Roboto',
-              fontSize: '18px',
-              fontWeight: 'normal',
-            }}>
-            Download
-          </Button>
-          <Link display="flex" align="center" justifyContent="center" mt={4}>
-            <Icon as={IoTrashOutline} fontSize="20" color="lightgray" />
-            <Text ml="4" fontWeight="medium" color="#FF4F4F">
-              Desativar Colaborador
-            </Text>
-          </Link>
-        </Box> */}
+        <Flex flexDir="column">
+          <Box
+            borderRadius={8}
+            bg="white"
+            boxShadow="sm"
+            p="8"
+            ml="4"
+            minWidth="364px"
+            mb="4"
+            h="fit-content">
+            <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
+              Opções
+            </Heading>
+            <Divider m="3px" borderColor="gray.100" />
+            <Link
+              display="flex"
+              align="center"
+              onClick={() =>
+                history.push(`/collaborator/edit/${collaborator?.id}`)
+              }
+              justifyContent="space-between"
+              mt={4}>
+              <Text fontWeight="medium" color="#FF4F4F">
+                Editar Colaborador
+              </Text>
+              <Icon as={FaUserEdit} fontSize="20" color="lightgray" />
+            </Link>
+            {collaborator?.isEnabled && (
+              <Link
+                display="flex"
+                align="center"
+                justifyContent="space-between"
+                onClick={() => setAlertOpen(true)}
+                mt={4}>
+                <Text fontWeight="medium" color="#FF4F4F">
+                  Desativar Colaborador
+                </Text>
+                <Icon as={IoTrashOutline} fontSize="20" color="lightgray" />
+              </Link>
+            )}
+            <MotionFlex
+              variants={variants}
+              animate={alertOpen ? 'open' : 'closed'}
+              display={alertOpen ? 'flex' : 'none'}
+              p="10px"
+              borderRadius="20px"
+              mt="20px"
+              flexDir="column">
+              <Text color="#FF4F4F">Deseja desativar o colaborador?</Text>
+              <Flex
+                mt="15px"
+                justifyContent="space-between"
+                alignItems="center">
+                <Button
+                  //@ts-ignore
+                  onClick={() => handleDesactiveCollaborator(collaborator.id)}>
+                  Confirmar
+                </Button>
+                <Button onClick={() => setAlertOpen(false)}>Cancelar</Button>
+              </Flex>
+            </MotionFlex>
+          </Box>
+          <Box
+            borderRadius={8}
+            bg="white"
+            boxShadow="sm"
+            p="8"
+            ml="4"
+            minWidth="364px"
+            h="fit-content">
+            <Heading as="h2" size="md" color="gray.800" fontFamily="Roboto">
+              Documentos
+            </Heading>
+            <Divider m="3px" borderColor="gray.100" />
+            <Stack margin="15px 0" spacing={2}>
+              {userFiles?.length === 0 ? (
+                <Text>Não existem documentos para download</Text>
+              ) : (
+                <>
+                  {userFiles?.map((file) => (
+                    <Flex
+                      key={file.id}
+                      w="100%"
+                      justifyContent="space-between"
+                      alignItems="center">
+                      <Text fontSize="16  px">{file.tag}</Text>
+                      <Icon
+                        onClick={() => handleDownloadFile(file.id)}
+                        as={IoMdCloudDownload}
+                        cursor="pointer"
+                        color="#FF4F4F"
+                        transition="all 0.8s ease"
+                        fontSize="30px"
+                        _hover={{ opacity: 0.5 }}
+                      />
+                    </Flex>
+                  ))}
+                </>
+              )}
+            </Stack>
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   )

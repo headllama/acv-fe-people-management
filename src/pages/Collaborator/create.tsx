@@ -92,6 +92,7 @@ export function CollaboratorCreate() {
     militaryCertificate: '',
     firstPhone: '',
     secondPhone: '',
+    email: '',
     dependent: {
       fullName: '',
       birthdate: '',
@@ -232,7 +233,7 @@ export function CollaboratorCreate() {
 
       firstPhone: data.firstPhone,
       secondPhone: data.secondPhone,
-      // email: ''
+      email: data.email,
 
       employeeAddress: {
         address: data.employeeAddress.address,
@@ -784,13 +785,13 @@ export function CollaboratorCreate() {
                   errors={errors}
                   mask="(99) 9999-9999"
                 />
-                {/* <FormInputText
-                name="email"
-                control={control}
-                label="E-mail"
-                register={register}
-                errors={errors}
-              /> */}
+                <FormInputText
+                  name="email"
+                  control={control}
+                  label="E-mail"
+                  register={register}
+                  errors={errors}
+                />
               </AccordionPanel>
             </AccordionItem>
 
@@ -990,8 +991,13 @@ export function CollaboratorCreate() {
         <Header />
       </Flex>
 
-      <Flex my="8" px="8">
-        <SimpleGrid flex="1" gap="6" align="flex-start">
+      <Flex justifyContent="center" my="8" px="8">
+        <SimpleGrid
+          width="100%"
+          maxWidth="1400px"
+          flex="1"
+          gap="6"
+          align="flex-start">
           {loading ? (
             <Box
               borderRadius={8}

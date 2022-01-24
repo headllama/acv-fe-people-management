@@ -1,11 +1,27 @@
+import { useEffect, useState } from 'react'
 import { Box, Flex, Heading, Text, Divider, Button } from '@chakra-ui/react'
 
 import { Header } from '../../components/Header'
 import { Sidebar } from '../../components/Sidebar'
 import { DoughnutChart } from '../../components/DoughnutChart'
 import { Link as ReachLink } from 'react-router-dom'
+import { api } from '../../services/api'
+import { GetCountEmployeeResult } from '../../types/GetCountEmployeeResult'
 
 export function Dashboard() {
+  const [enabledEmployeers, setEnabledEmployeers] = useState(0)
+  const [disabledEmployeers, setDisabledEmployeers] = useState(0)
+  const [totalEmployeers, setTotalEmployeers] = useState(0)
+
+  useEffect(() => {
+    api.get('/Employees/count').then((response) => {
+      const countEmployees: GetCountEmployeeResult = response.data
+      setEnabledEmployeers(countEmployees.enabledEmployees)
+      setDisabledEmployeers(countEmployees.disabledEmployees)
+      setTotalEmployeers(countEmployees.totalEmployees)
+    })
+  }, [])
+
   return (
     <>
       <Flex
@@ -47,7 +63,10 @@ export function Dashboard() {
                 mb={6}>
                 Gestão de pessoas
               </Heading>
-              <DoughnutChart />
+              <DoughnutChart
+                numberOfEmployeers={totalEmployeers}
+                numberOfInactiveEmployeers={disabledEmployeers}
+              />
             </Box>
 
             <Box
@@ -58,13 +77,13 @@ export function Dashboard() {
               ml="4"
               w="500px">
               <Text fontSize="lg" mb="4">
-                Colaboradores
+                Total de Colaboradores
               </Text>
               <Heading as="h1" color="gray.800" mb="4" fontFamily="Roboto">
-                200
+                {totalEmployeers}
               </Heading>
               <Text fontSize="lg" color="gray.800" my="6">
-                150 Aceville e 50 Tercerizados
+                {enabledEmployeers} Ativos e {disabledEmployeers} Inativos
               </Text>
               <Divider m="3px" borderColor="gray.100" />
               <Button
