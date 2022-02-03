@@ -105,6 +105,9 @@ export interface CollaboratorsCreate extends Collaborators {
     state: string
   }
   cnhDocument: string
+  partnerName: string
+  partnerBirthdate: any
+  electoralRegister: string
   cnhCategory: string
   cnhRegisterDate: string
   cnhExpiration: string

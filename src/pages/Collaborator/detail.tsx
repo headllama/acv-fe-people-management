@@ -122,6 +122,16 @@ export function CollaboratorDetail() {
           : '',
       },
       {
+        label: 'Nome do Cônjugue',
+        userData: collaborator?.partnerName,
+      },
+      {
+        label: 'Data de nascimento do Cônjugue',
+        userData: collaborator?.partnerBirthdate
+          ? format(new Date(collaborator?.partnerBirthdate), 'dd/MM/yyyy')
+          : '',
+      },
+      {
         label: 'CPF',
         userData: collaborator?.cpf,
       },
@@ -271,6 +281,10 @@ export function CollaboratorDetail() {
       //   label: 'Certificado de Reservista',
       //   userData: '-',
       // },
+      {
+        label: 'Titulo de eleitor',
+        userData: collaborator?.electoralRegister,
+      },
     ])
   }, [collaborator])
 

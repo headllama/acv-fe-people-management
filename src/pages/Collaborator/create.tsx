@@ -64,6 +64,7 @@ interface UFResponse {
 
 export function CollaboratorCreate() {
   const [birthDate, setBirthDate] = useState<Date>(new Date())
+  const [partnerBirthDate, setPartnerBirthDate] = useState<Date>(new Date())
   const [admissionDate, setAdmissionDate] = useState<Date>(new Date())
   const [rgRegisterDate, setRgRegisterDate] = useState<Date>(new Date())
   const [cnhRegisterDate, setCnhRegisterDate] = useState<Date>(new Date())
@@ -107,8 +108,11 @@ export function CollaboratorCreate() {
       zipCode: '',
       nationality: '',
     },
+    partnerName: '',
     bankBranch: '',
+    partnerBirthdate: '',
     bankAccount: '',
+    electoralRegister: '',
     bank: '',
     bankCode: '',
     bankAccountType: '',
@@ -219,17 +223,16 @@ export function CollaboratorCreate() {
       cnhCategory: data.cnhCategory,
       cnhRegisterDate: cnhRegisterDate,
       cnhExpiration: cnhExpiration,
-      // firstCNH: parseInt(data.firstCNH),
-
       ctpsDocument: data.ctpsDocument,
       ctpsSeries: data.ctpsSeries,
       ctpsState: data.ctpsState,
       ctpsRegisterDate: ctpsRegisterDate,
-
+      partnerName: data.partnerName,
+      partnerBirthdate: partnerBirthDate,
+      electoralRegister: data.electoralRegister,
+      dependents: dependentsData,
       militaryCertificate: data.militaryCertificate,
       pis: data.pis,
-
-      dependents: dependentsData,
 
       firstPhone: data.firstPhone,
       secondPhone: data.secondPhone,
@@ -406,6 +409,33 @@ export function CollaboratorCreate() {
                     register={register}
                     errors={errors}
                     required
+                  />
+                </Flex>
+                <Flex direction="row">
+                  <FormInputText
+                    name="partnerName"
+                    control={control}
+                    label="Nome do Cônjuge"
+                    register={register}
+                    errors={errors}
+                    required
+                  />
+                  <FormInputDate
+                    name="partnerBirthdate"
+                    errors={errors}
+                    selectedDate={partnerBirthDate}
+                    onChange={(e) => {
+                      if (!e) {
+                        setError('birthdate', {
+                          type: 'required',
+                          message: 'Campo é obrigatório',
+                        })
+                      } else {
+                        clearErrors(['birthdate'])
+                      }
+                      setPartnerBirthDate(e)
+                    }}
+                    label="Data Nascimento do Cônjugue"
                   />
                 </Flex>
                 <Flex direction="row">
@@ -661,13 +691,22 @@ export function CollaboratorCreate() {
                   register={register}
                   errors={errors}
                 />
-                <FormInputText
-                  name="militaryCertificate"
-                  control={control}
-                  label="Certificado de Reservista"
-                  register={register}
-                  errors={errors}
-                />
+                <Flex>
+                  <FormInputText
+                    name="militaryCertificate"
+                    control={control}
+                    label="Certificado de Reservista"
+                    register={register}
+                    errors={errors}
+                  />
+                  <FormInputText
+                    name="electoralRegister"
+                    control={control}
+                    label="Titulo de eleitor"
+                    register={register}
+                    errors={errors}
+                  />
+                </Flex>
               </AccordionPanel>
             </AccordionItem>
 
@@ -776,14 +815,6 @@ export function CollaboratorCreate() {
                   errors={errors}
                   required
                   mask="(99) 99999-9999"
-                />
-                <FormInputTextMask
-                  name="secondPhone"
-                  control={control}
-                  label="Telefone (opcional)"
-                  register={register}
-                  errors={errors}
-                  mask="(99) 9999-9999"
                 />
                 <FormInputText
                   name="email"

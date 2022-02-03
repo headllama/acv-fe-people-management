@@ -20,6 +20,9 @@ export interface SearchEmployeeResult {
   occupation?: string
   remuneration?: string
   admissionDate?: Date | string
+  electoralRegister: string
+  partnerName: string
+  partnerBirthdate: any
   bankBranch: string | undefined
   bankAccount: string | undefined
   bank: string | undefined

@@ -106,6 +106,10 @@ export const optionsAccountType = [
     label: 'Conta Poupança',
     value: '1',
   },
+  {
+    label: 'Conta Salário',
+    value: '2',
+  },
 ]
 
 export const optionsPIXType = [

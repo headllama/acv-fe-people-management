@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react'
 import moment from 'moment'
@@ -73,8 +74,9 @@ export function Training() {
   const [startDate, setStartDate] = useState(new Date())
   const [modalIsOpen, setModalOpen] = useState(false)
   const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false)
+  const [modalEditIsOpen, setModalEditIsOpen] = useState(false)
   const [selectedTraining, setSelectedTraining] =
-    useState<TrainingProps | null>()
+    useState<TrainingProps | null>(null)
   const [trainings, setTrainings] = useState<TrainingProps[]>([])
   const toast = useToast()
   const { register, handleSubmit, formState } = useForm({
@@ -132,6 +134,16 @@ export function Training() {
   const handleCloseDeleteTraining = () => {
     setModalDeleteIsOpen(false)
     setSelectedTraining(null)
+  }
+
+  const handleOpenEditingTraining = (training: TrainingProps) => {
+    setSelectedTraining(training)
+    setModalEditIsOpen(true)
+  }
+
+  const handleCloseEditingTraining = () => {
+    setSelectedTraining(null)
+    setModalEditIsOpen(false)
   }
 
   return (
@@ -212,7 +224,13 @@ export function Training() {
                                 variant="unstiled"
                               />
                               <MenuList>
-                                <MenuItem icon={<MdEdit />}>Editar</MenuItem>
+                                <MenuItem
+                                  onClick={() =>
+                                    handleOpenEditingTraining(item)
+                                  }
+                                  icon={<MdEdit />}>
+                                  Editar
+                                </MenuItem>
                                 <MenuItem
                                   onClick={() => handleOpenDeleteTraining(item)}
                                   color="red"
@@ -253,6 +271,57 @@ export function Training() {
               />
             </Box>
           </Flex>
+
+          <Modal
+            isCentered
+            isOpen={modalEditIsOpen}
+            onClose={() => setModalEditIsOpen(false)}>
+            <ModalOverlay />
+            <form onSubmit={handleSubmit(handleCreateTraining)}>
+              <ModalContent>
+                <ModalHeader>
+                  Você está editando o {selectedTraining?.name}
+                </ModalHeader>
+                <ModalBody>
+                  <CustomInput
+                    label="Treinamento"
+                    defaultValue={selectedTraining?.name}
+                    {...register('name')}
+                    error={formState.errors.name}
+                    placeholder="Treinamento"
+                  />
+
+                  <CustomInput
+                    label="Carga Horária"
+                    defaultValue={selectedTraining?.workload}
+                    {...register('hours')}
+                    error={formState.errors.hours}
+                    placeholder="Carga horária"
+                  />
+
+                  <FormLabel>Validade</FormLabel>
+                  <CustomDatePicker
+                    //@ts-ignore
+                    selectedDate={new Date(selectedTraining?.validDate)}
+                    onChange={(date) => setStartDate(date)}
+                  />
+                </ModalBody>
+                <ModalCloseButton />
+                <ModalFooter>
+                  <Button mr={3} onClick={handleCloseEditingTraining}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    background="green.400"
+                    color="white"
+                    type="submit"
+                    variant="red">
+                    Salvar
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </form>
+          </Modal>
 
           <Modal
             isCentered

@@ -65,6 +65,13 @@ type EditUserFormProps = {
 export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
   const history = useHistory()
   const toast = useToast()
+  const [partnerBirthDate, setPartnerBirthDate] = useState<Date>(
+    new Date(
+      collaborator?.partnerBirthdate
+        ? collaborator?.partnerBirthdate
+        : new Date()
+    )
+  )
 
   const [birthDate, setBirthDate] = useState<Date>(
     new Date(collaborator?.birthdate ? collaborator?.birthdate : new Date())
@@ -120,6 +127,7 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
     console.log(collaborator, 'colaborador')
   }, [collaborator])
 
+  // IBGE API
   useEffect(() => {
     ibgeApi.get('estados?orderBy=nome').then((response) => {
       const ufsFormatted = response.data
@@ -226,6 +234,9 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
       occupation: data.occupation,
       remuneration,
       admissionDate,
+      electoralRegister: data.electoralRegister,
+      partnerName: data.partnerName,
+      partnerBirthDate: partnerBirthDate,
 
       rgDocument: data?.rg?.document,
       rgIssuer: data?.rg?.issuer,
@@ -406,6 +417,25 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
                 />
               </Flex>
               <Flex direction="row">
+                <FormInputText
+                  name="partnerName"
+                  control={control}
+                  label="Nome do Cônjuge"
+                  register={register}
+                  errors={errors}
+                  required
+                />
+                <FormInputDate
+                  name="partnerBirthdate"
+                  errors={errors}
+                  selectedDate={partnerBirthDate}
+                  onChange={(e) => {
+                    setPartnerBirthDate(e)
+                  }}
+                  label="Data Nascimento do Cônjugue"
+                />
+              </Flex>
+              <Flex direction="row">
                 <FormInputDropdownNoValidation
                   name="evaluationPeriod"
                   control={control}
@@ -574,17 +604,27 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
                   label="Data de Emissão CTPS"
                 />
               </Flex>
+              <Flex>
+                <FormInputText
+                  name="pis"
+                  control={control}
+                  label="PIS"
+                  register={register}
+                  errors={errors}
+                />
+                <FormInputText
+                  name="militaryCertificate"
+                  control={control}
+                  label="Certificado de Reservista"
+                  register={register}
+                  errors={errors}
+                />
+              </Flex>
+
               <FormInputText
-                name="pis"
+                name="electoralRegister"
                 control={control}
-                label="PIS"
-                register={register}
-                errors={errors}
-              />
-              <FormInputText
-                name="militaryCertificate"
-                control={control}
-                label="Certificado de Reservista"
+                label="Titulo de eleitor"
                 register={register}
                 errors={errors}
               />
@@ -685,14 +725,6 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
                 register={register}
                 errors={errors}
                 mask="(99) 99999-9999"
-              />
-              <FormInputTextMask
-                name="secondPhone"
-                control={control}
-                label="Telefone (opcional)"
-                register={register}
-                errors={errors}
-                mask="(99) 9999-9999"
               />
               <FormInputText
                 name="email"
