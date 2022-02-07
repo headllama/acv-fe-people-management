@@ -58,7 +58,7 @@ const states = [
     progressColor: 'red',
   },
   {
-    title: 'Aivos',
+    title: 'Ativos',
     quantity: '7',
     progressValue: 80,
     progressColor: 'green',
@@ -134,6 +134,31 @@ export function Training() {
   const handleCloseDeleteTraining = () => {
     setModalDeleteIsOpen(false)
     setSelectedTraining(null)
+  }
+
+  const handleDeleteTraining = (id?: string) => {
+    api
+      .delete(`Training/${id}`)
+      .then(() => {
+        setTrainings([...trainings.filter((item) => item.id !== id)])
+        toast({
+          title: 'Treinamento excluído com sucesso',
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        toast({
+          title: 'Ops! Aconteceu algum error ao excluir o treinamento',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        })
+      })
+
+    setModalDeleteIsOpen(false)
   }
 
   const handleOpenEditingTraining = (training: TrainingProps) => {
@@ -342,7 +367,8 @@ export function Training() {
                   background="red"
                   color="white"
                   type="submit"
-                  variant="red">
+                  variant="red"
+                  onClick={() => handleDeleteTraining(selectedTraining?.id)}>
                   Excluir
                 </Button>
               </ModalFooter>
