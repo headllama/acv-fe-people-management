@@ -364,15 +364,25 @@ export function CollaboratorCreate() {
                     label="Data Nascimento"
                   />
                 </Flex>
-                <FormInputDropdown
-                  name="education"
-                  control={control}
-                  label="Escolaridade"
-                  register={register}
-                  errors={errors}
-                  options={optionsEducation}
-                  required
-                />
+                <Flex>
+                  <FormInputDropdown
+                    name="education"
+                    control={control}
+                    label="Escolaridade"
+                    register={register}
+                    errors={errors}
+                    options={optionsEducation}
+                    required
+                  />
+                  <FormInputText
+                    name="employeeAddress.nationality"
+                    control={control}
+                    label="Nacionalidade"
+                    register={register}
+                    errors={errors}
+                  />
+                </Flex>
+
                 <Flex direction="row">
                   <FormInputDropdown
                     name="breed"
@@ -418,7 +428,6 @@ export function CollaboratorCreate() {
                     label="Nome do Cônjuge"
                     register={register}
                     errors={errors}
-                    required
                   />
                   <FormInputDate
                     name="partnerBirthdate"
@@ -890,13 +899,6 @@ export function CollaboratorCreate() {
                     errors={errors}
                     options={ufs}
                     required
-                  />
-                  <FormInputText
-                    name="employeeAddress.nationality"
-                    control={control}
-                    label="Nacionalidade"
-                    register={register}
-                    errors={errors}
                   />
                 </Flex>
               </AccordionPanel>
