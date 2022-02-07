@@ -99,7 +99,6 @@ function AuthProvider({ children }: AuthProviderProps) {
           status: 'error',
           duration: 5000,
           isClosable: true,
-          position: 'top',
         })
       })
   }, [])

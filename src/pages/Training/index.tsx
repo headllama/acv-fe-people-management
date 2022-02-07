@@ -49,21 +49,7 @@ import CustomDatePicker from '../../components/DatePicker'
 import { useForm } from 'react-hook-form'
 import { CustomInput } from '../../components/Form/CustomInput'
 import { TrainingProps } from '../../types/Trainings'
-
-const states = [
-  {
-    title: 'Inativos',
-    quantity: '3',
-    progressValue: 40,
-    progressColor: 'red',
-  },
-  {
-    title: 'Ativos',
-    quantity: '7',
-    progressValue: 80,
-    progressColor: 'green',
-  },
-]
+import { ApiError } from '../../types'
 
 const signInFormSchema = yup.object().shape({
   name: yup.string().required('Nome do treinamento obrigatório'),
@@ -82,6 +68,22 @@ export function Training() {
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInFormSchema),
   })
+
+  const states = [
+    {
+      title: 'Ativos',
+      quantity: trainings.length.toString(),
+      progressValue:
+        trainings.length > 0 ? trainings.length + 5 : trainings.length + 1,
+      progressColor: 'green',
+    },
+    {
+      title: 'Inativos',
+      quantity: '0',
+      progressValue: 1,
+      progressColor: 'red',
+    },
+  ]
 
   useEffect(() => {
     api.get('/Training').then((response) => {
@@ -113,27 +115,20 @@ export function Training() {
           isClosable: true,
         })
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
           title: 'Ops! Aconteceu algum error ao criar o treinamento',
-          description: 'Verifique se a data limite está correta',
+          description: `${
+            error.response.data.errors[0].message
+              ? error.response.data.errors[0].message
+              : error.response.data.message
+          }`,
           status: 'error',
           duration: 9000,
           isClosable: true,
         })
       })
     setModalOpen(false)
-  }
-
-  const handleOpenDeleteTraining = (training: TrainingProps) => {
-    setModalDeleteIsOpen(true)
-    setSelectedTraining(training)
-    console.log(training)
-  }
-
-  const handleCloseDeleteTraining = () => {
-    setModalDeleteIsOpen(false)
-    setSelectedTraining(null)
   }
 
   const handleDeleteTraining = (id?: string) => {
@@ -149,9 +144,13 @@ export function Training() {
         })
       })
       .catch((error) => {
-        console.log(error)
         toast({
           title: 'Ops! Aconteceu algum error ao excluir o treinamento',
+          description: `${
+            error.response.data.errors[0].message
+              ? error.response.data.errors[0].message
+              : error.response.data.message
+          }`,
           status: 'error',
           duration: 9000,
           isClosable: true,
@@ -159,6 +158,17 @@ export function Training() {
       })
 
     setModalDeleteIsOpen(false)
+  }
+
+  const handleOpenDeleteTraining = (training: TrainingProps) => {
+    setModalDeleteIsOpen(true)
+    setSelectedTraining(training)
+    console.log(training)
+  }
+
+  const handleCloseDeleteTraining = () => {
+    setModalDeleteIsOpen(false)
+    setSelectedTraining(null)
   }
 
   const handleOpenEditingTraining = (training: TrainingProps) => {
@@ -212,89 +222,98 @@ export function Training() {
             </Box>
           </Flex>
           <Flex m="4">
-            <Box borderRadius={8} bg="white" flex="1">
-              <Box p={8}>
-                <InputGroup>
-                  <Input placeholder="Busque por nome" size="lg" />
-                  <InputRightElement
-                    top="4px"
-                    // eslint-disable-next-line react/no-children-prop
-                    children={<Icon as={IoSearchOutline} />}
-                  />
-                </InputGroup>
-              </Box>
-              {trainings.length > 0 ? (
-                <>
-                  <Table variant="simple" overflowY="scroll">
-                    <Thead>
-                      <Tr>
-                        <Th>Nome</Th>
-                        <Th>Carga horária</Th>
-                        <Th>Data limite</Th>
-                        <Th></Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {trainings.map((item) => (
-                        <Tr key={item.id}>
-                          <Td>{item.name}</Td>
-                          <Td textAlign="center">{item.workload}</Td>
-                          <Td>{moment(item.validDate).format('MM/DD/YYYY')}</Td>
-                          <Td>
-                            <Menu>
-                              <MenuButton
-                                as={IconButton}
-                                aria-label="Options"
-                                icon={<MdMoreVert />}
-                                variant="unstiled"
-                              />
-                              <MenuList>
-                                <MenuItem
-                                  onClick={() =>
-                                    handleOpenEditingTraining(item)
-                                  }
-                                  icon={<MdEdit />}>
-                                  Editar
-                                </MenuItem>
-                                <MenuItem
-                                  onClick={() => handleOpenDeleteTraining(item)}
-                                  color="red"
-                                  icon={<MdOutlineDelete />}>
-                                  Excluir
-                                </MenuItem>
-                              </MenuList>
-                            </Menu>
-                          </Td>
+            <Flex w="80%">
+              <Box borderRadius={8} bg="white" flex="1">
+                <Box p={8}>
+                  <InputGroup>
+                    <Input placeholder="Busque por nome" size="lg" />
+                    <InputRightElement
+                      top="4px"
+                      // eslint-disable-next-line react/no-children-prop
+                      children={<Icon as={IoSearchOutline} />}
+                    />
+                  </InputGroup>
+                </Box>
+                {trainings.length > 0 ? (
+                  <>
+                    <Table variant="simple" overflowY="scroll">
+                      <Thead>
+                        <Tr>
+                          <Th>Nome</Th>
+                          <Th>Carga horária</Th>
+                          <Th>Data limite</Th>
+                          <Th></Th>
                         </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
+                      </Thead>
+                      <Tbody>
+                        {trainings.map((item) => (
+                          <Tr key={item.id}>
+                            <Td>{item.name}</Td>
+                            <Td textAlign="center">{item.workload}</Td>
+                            <Td>
+                              {moment(item.validDate).format('MM/DD/YYYY')}
+                            </Td>
+                            <Td>
+                              <Menu>
+                                <MenuButton
+                                  as={IconButton}
+                                  aria-label="Options"
+                                  icon={<MdMoreVert />}
+                                  variant="unstiled"
+                                />
+                                <MenuList>
+                                  <MenuItem
+                                    onClick={() =>
+                                      handleOpenEditingTraining(item)
+                                    }
+                                    icon={<MdEdit />}>
+                                    Editar
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() =>
+                                      handleOpenDeleteTraining(item)
+                                    }
+                                    color="red"
+                                    icon={<MdOutlineDelete />}>
+                                    Excluir
+                                  </MenuItem>
+                                </MenuList>
+                              </Menu>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
 
-                  {/* <Flex align="center" justify="center">
+                    {/* <Flex align="center" justify="center">
                     <Pagination />
                   </Flex> */}
-                </>
-              ) : (
-                <Flex align="center" justify="center" p={10}>
-                  <NoResults text={'Nenhum treinamento por aqui...'} />
-                </Flex>
-              )}
-            </Box>
+                  </>
+                ) : (
+                  <Flex align="center" justify="center" p={10}>
+                    <NoResults text={'Nenhum treinamento por aqui...'} />
+                  </Flex>
+                )}
+              </Box>
+            </Flex>
 
-            <Box
-              borderRadius={8}
-              bg="white"
-              boxShadow="sm"
-              p="8"
-              ml="4"
-              minWidth="364px">
-              <ManagementEmployees
-                total={10}
-                title="Total de treinamentos"
-                description="Status dos treinamentos"
-                states={states}
-              />
-            </Box>
+            <Flex>
+              <Box
+                borderRadius={8}
+                bg="white"
+                boxShadow="sm"
+                p="8"
+                ml="4"
+                minWidth="364px"
+                maxHeight="350px">
+                <ManagementEmployees
+                  total={trainings.length}
+                  title="Total de treinamentos"
+                  description="Status dos treinamentos"
+                  states={states}
+                />
+              </Box>
+            </Flex>
           </Flex>
 
           <Modal
