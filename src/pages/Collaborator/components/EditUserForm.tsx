@@ -423,7 +423,6 @@ export const EditUserForm = ({ collaborator, id }: EditUserFormProps) => {
                   label="Nome do Cônjuge"
                   register={register}
                   errors={errors}
-                  required
                 />
                 <FormInputDate
                   name="partnerBirthdate"
