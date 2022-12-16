@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: acv-fe-people-management
+  annotations:
+    github.com/project-slug: renanalvesmedina/acv-fe-people-management
+spec:
+  type: other
+  lifecycle: unknown
+  owner: default
